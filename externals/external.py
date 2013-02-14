@@ -10,6 +10,9 @@ XML DOM - not really external, yet tree-like with content
 class NoParentError(LookupError):
     pass
 
+class NotFoundError(LookupError):
+    pass
+
 
 class External(object):
 
@@ -72,13 +75,15 @@ class External(object):
 
         Examples:
 
-        Given this structure:
+        Given this structure
 
-        '/' - a - b
-        | \    \   \
-        |  x    y   x
-        |
-         \.git
+                b -- x
+               /
+              a -- y
+             /
+        '/' +-- x
+             \
+              .git
 
         External( /a/b ).locate(   'b'  ) is External( /a/b   )
         External( /a/b ).locate(   'x'  ) is External( /a/b/x )
@@ -86,4 +91,12 @@ class External(object):
         External( /a/b ).locate(   'y'  ) is External( /a/y   )
         External( /a/b ).locate( '.git' ) is External( /.git  )
         '''
-        pass
+        try:
+            parent = self
+            while True:
+                candidate = parent.child(name)
+                if candidate.exists():
+                    return candidate
+                parent = parent.parent()
+        except NoParentError:
+            raise NotFoundError
