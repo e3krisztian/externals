@@ -68,5 +68,22 @@ class External(object):
         pass
 
     def locate(self, name):
-        ''' Closest child of an ancestor with :name: '''
+        r''' The longest existing path, that ends in :name: and shares all, but maybe the last name with :self:.
+
+        Examples:
+
+        Given this structure:
+
+        '/' - a - b
+        | \    \   \
+        |  x    y   x
+        |
+         \.git
+
+        External( /a/b ).locate(   'b'  ) is External( /a/b   )
+        External( /a/b ).locate(   'x'  ) is External( /a/b/x )
+        External( /a   ).locate(   'x'  ) is External( /x     )
+        External( /a/b ).locate(   'y'  ) is External( /a/y   )
+        External( /a/b ).locate( '.git' ) is External( /.git  )
+        '''
         pass
