@@ -1,10 +1,10 @@
-from external import External
-from external import NoParentError
+from externals.external import External
+from externals.external import NoParentError
 import os
 import shutil
 
 
-class FileExternal(External):
+class FsPath(External):
 
     def __init__(self, path):
         self._path = os.path.realpath(path)
@@ -18,10 +18,10 @@ class FileExternal(External):
         new_path, tail = os.path.split(self._path)
         if not tail:
             raise NoParentError
-        return FileExternal(new_path)
+        return FsPath(new_path)
 
     def child(self, name):
-        return FileExternal(os.path.join(self._path, name))
+        return FsPath(os.path.join(self._path, name))
 
     def __add__(self, sub_path):
         ''' Syntactic sugar for child(u'name1').child(u'name2')...
@@ -29,7 +29,7 @@ class FileExternal(External):
         x + u'name'
         x + u'name1/name2/name3'
         '''
-        return FileExternal(
+        return FsPath(
             os.path.join(
                 self._path,
                 sub_path.strip(os.path.sep)))
