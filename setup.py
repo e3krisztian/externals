@@ -15,6 +15,5 @@ setup(name='externals',
 #       url='http://maybe.later',
       packages=['externals'],
       install_requires=['tempdir >=0.4, <1.0'],
-      test_requires=['nose >=0.13'],
       provides=['externals (0.1)']
      )
