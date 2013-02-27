@@ -27,13 +27,21 @@ class External(object):
     def child(self, name):
         pass
 
-    def __add__(self, sub_path):
+    def __div__(self, sub_path):
         ''' Syntactic sugar for child(u'name1').child(u'name2')...
 
-        x + u'name'
-        x + u'name1/name2/name3'
+        x / u'name'
+        x / u'name1/name2/name3'
         '''
         pass
+
+    def __truediv__(self, sub_path):
+        ''' Syntactic sugar for child(u'name1').child(u'name2')...
+
+        x / u'name'
+        x / u'name1/name2/name3'
+        '''
+        return self.__div__(sub_path)
 
     def exists(self):
         pass

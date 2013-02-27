@@ -156,7 +156,7 @@ class TestFsPath(unittest.TestCase):
             x_tempdir = m.FsPath(d.name)
             x_tempdir.child(u'a').create('child')
 
-            self.assertEqual('child', (x_tempdir + u'a').content())
+            self.assertEqual('child', (x_tempdir / u'a').content())
 
     def test_add_a_path(self):
         with TempDir() as d:
@@ -164,7 +164,7 @@ class TestFsPath(unittest.TestCase):
             # file dir-a/dir-b/dir-c
             x_tempdir.child(u'dir-a').child(u'dir-b').child('dir-c').create('child')
 
-            self.assertEqual('child', (x_tempdir + u'dir-a/dir-b/dir-c').content())
+            self.assertEqual('child', (x_tempdir / u'dir-a/dir-b/dir-c').content())
 
     def test_add_a_path_wrapped_in_slashes(self):
         with TempDir() as d:
@@ -172,4 +172,4 @@ class TestFsPath(unittest.TestCase):
             # file dir-a/dir-b/dir-c
             x_tempdir.child(u'dir-a').child(u'dir-b').child('dir-c').create('child')
 
-            self.assertEqual('child', (x_tempdir + u'/dir-a/dir-b/dir-c/').content())
+            self.assertEqual('child', (x_tempdir / u'/dir-a/dir-b/dir-c/').content())
