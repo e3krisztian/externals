@@ -11,7 +11,8 @@ class Locator(m.External):
         self._is_root = path == u'/'
 
     def exists(self):
-        return self.path in [u'/', u'/a', u'/a/b', u'/a/b/x', u'/a/y', u'/x', u'/.git']
+        return self.path in [
+            u'/', u'/a', u'/a/b', u'/a/b/x', u'/a/y', u'/x', u'/.git']
 
     def child(self, name):
         if self._is_root:
@@ -57,6 +58,7 @@ External( /a   ).locate(   'x'  ) is External( /x     )
 External( /a/b ).locate(   'y'  ) is External( /a/y   )
 External( /a/b ).locate( '.git' ) is External( /.git  )
 '''
+
 
 class TestExternal(unittest.TestCase):
 

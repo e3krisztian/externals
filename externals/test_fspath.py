@@ -99,6 +99,7 @@ class TestFsPath(unittest.TestCase):
             os.mkdir(os.path.join(d.name, 'c'))
 
             x_test = m.FsPath(d.name)
+
             def name(x):
                 return x.name
             children = sorted(x_test.children(), key=name)
@@ -151,7 +152,7 @@ class TestFsPath(unittest.TestCase):
 
             self.assertFalse(x_ab.exists())
 
-    def test_adding_a_string_to_an_external_is_the_same_as_asking_for_a_child(self):
+    def test_adding_a_string_to_an_external_means_asking_for_a_child(self):
         with TempDir() as d:
             x_tempdir = m.FsPath(d.name)
             x_tempdir.child(u'a').create('child')
@@ -162,14 +163,18 @@ class TestFsPath(unittest.TestCase):
         with TempDir() as d:
             x_tempdir = m.FsPath(d.name)
             # file dir-a/dir-b/dir-c
-            x_tempdir.child(u'dir-a').child(u'dir-b').child('dir-c').create('child')
+            x_tempdir.child(
+                u'dir-a').child(u'dir-b').child('dir-c').create('child')
 
-            self.assertEqual('child', (x_tempdir / u'dir-a/dir-b/dir-c').content())
+            self.assertEqual(
+                'child', (x_tempdir / u'dir-a/dir-b/dir-c').content())
 
     def test_add_a_path_wrapped_in_slashes(self):
         with TempDir() as d:
             x_tempdir = m.FsPath(d.name)
             # file dir-a/dir-b/dir-c
-            x_tempdir.child(u'dir-a').child(u'dir-b').child('dir-c').create('child')
+            x_tempdir.child(
+                u'dir-a').child(u'dir-b').child('dir-c').create('child')
 
-            self.assertEqual('child', (x_tempdir / u'/dir-a/dir-b/dir-c/').content())
+            self.assertEqual(
+                'child', (x_tempdir / u'/dir-a/dir-b/dir-c/').content())
