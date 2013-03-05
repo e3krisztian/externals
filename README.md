@@ -1,5 +1,4 @@
-Externals
-=========
+# Externals
 
 Externals is intended to be a light abstraction of hierarchically named resources,
 potentially external to the current process.
@@ -10,8 +9,7 @@ creating and destroying data on common resource providers.
 It is definitely not the intention to provide a rich set of operations.
 
 
-Explicit goals:
----------------
+## Explicit goals:
 
 - simple access to content - both read and write
 - easy discovery of namespace
@@ -22,8 +20,7 @@ Explicit goals:
 	- free temporary storage
 
 
-Explicit non-goals:
--------------------
+## Explicit non-goals:
 
 - access to security attributes - security is service dependent
 - support for efficient service side reorganization of the namespace -
