@@ -7,8 +7,10 @@ REST
 XML DOM - not really external, yet tree-like with content
 '''
 
+
 class NoParentError(LookupError):
     pass
+
 
 class NotFoundError(LookupError):
     pass
@@ -79,7 +81,8 @@ class External(object):
         pass
 
     def locate(self, name):
-        r''' The longest existing path, that ends in :name: and shares all, but maybe the last name with :self:.
+        ''' The longest existing path, that ends in :name: and shares all, but
+        maybe the last name with :self:.
 
         Examples:
 
