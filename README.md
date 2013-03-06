@@ -27,9 +27,11 @@ It is definitely not the intention to provide a rich set of operations.
   moving, duplicating content - these operations require more than one resource
   path
 
+
 ## Development
 
 ### Run Tests
+
 Use `tox` to run the tests:
 
     tox
