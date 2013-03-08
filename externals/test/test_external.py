@@ -76,7 +76,7 @@ class TestExternal(unittest.TestCase):
     def test_locate_ab_y_is_ay(self):
         self.check(u'/a/y', u'/a/b', u'y')
 
-    def test_locate_ab_y_is_ay(self):
+    def test_locate_ab_y_is_git(self):
         self.check(u'/.git', u'/a/b', u'.git')
 
     def test_locate_ab_z_raises_NotFoundError(self):
