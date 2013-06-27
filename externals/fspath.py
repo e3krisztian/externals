@@ -73,3 +73,7 @@ class FsPath(External):
 
     def remove(self):
         shutil.rmtree(self._path)
+
+
+def working_directory():
+    return FsPath('.')
