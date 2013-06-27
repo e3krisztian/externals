@@ -1,10 +1,9 @@
 # coding: utf8
 import unittest
-import os
 import externals.external as m
 
 
-class Locator(m.External):
+class TestHierarchy(m.Hierarchy):
 
     def __init__(self, path):
         self.path = path
@@ -27,17 +26,17 @@ class Locator(m.External):
         return self.__class__(head or u'/')
 
 
-class TestLocator(unittest.TestCase):
+class Test_TestHierarchy(unittest.TestCase):
 
     def test_parent_of_root_raises_error(self):
         with self.assertRaises(m.NoParentError):
-            Locator(u'/').parent()
+            TestHierarchy(u'/').parent()
 
     def test_parent_of_a_is_root(self):
-        self.assertEqual(u'/', Locator(u'/a').parent().path)
+        self.assertEqual(u'/', TestHierarchy(u'/a').parent().path)
 
     def test_child_of_root(self):
-        self.assertEqual(u'/a', Locator(u'/').child(u'a').path)
+        self.assertEqual(u'/a', TestHierarchy(u'/').child(u'a').path)
 
 
 '''
@@ -59,10 +58,10 @@ External( /a/b ).locate( '.git' ) is External( /.git  )
 '''
 
 
-class TestExternal(unittest.TestCase):
+class Test_locate(unittest.TestCase):
 
     def check(self, expected, orig, name):
-        self.assertEqual(expected, Locator(orig).locate(name).path)
+        self.assertEqual(expected, m.locate(TestHierarchy(orig), name).path)
 
     def test_locate_ab_b_is_ab(self):
         self.check(u'/a/b', u'/a/b', u'b')
@@ -81,4 +80,4 @@ class TestExternal(unittest.TestCase):
 
     def test_locate_ab_z_raises_NotFoundError(self):
         with self.assertRaises(m.NotFoundError):
-            Locator(u'/a/b').locate(u'z')
+            m.locate(TestHierarchy(u'/a/b'), u'z')
