@@ -45,6 +45,10 @@ class FsPath(External):
             return f.read()
 
     def set_content(self, content):
+        parent, tail = os.path.split(self._path)
+        if not os.path.exists(parent):
+            os.makedirs(parent)
+
         with self.writable_stream() as f:
             f.write(content)
 
@@ -60,16 +64,6 @@ class FsPath(External):
     def __iter__(self):
         for name in os.listdir(self._path):
             yield self.child(name)
-
-    def children(self):
-        return list(self)
-
-    def create(self, content):
-        parent, tail = os.path.split(self._path)
-        if not os.path.exists(parent):
-            os.makedirs(parent)
-
-        self.set_content(content)
 
     def remove(self):
         shutil.rmtree(self._path)

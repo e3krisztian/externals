@@ -27,6 +27,7 @@ class Hierarchy(object):
     def parent(self):
         pass
 
+    # TODO: Hierarchy.child(name) -> Hierarchy / name
     @abstractmethod
     def child(self, name):
         pass
@@ -72,6 +73,7 @@ class External(Hierarchy):
 
     @abstractmethod
     def set_content(self, content):
+        ''' Creates the file, creates missing directories up to the file '''
         pass
 
     @abstractmethod
@@ -86,18 +88,12 @@ class External(Hierarchy):
     def is_dir(self):
         pass
 
-    @abstractmethod
     def children(self):
-        pass
+        return list(self)
 
     @abstractmethod
     def __iter__(self):
         ''' Iterator over children '''
-        pass
-
-    @abstractmethod
-    def create(self, content):
-        ''' Creates the file, creates missing directories up to the file '''
         pass
 
     @abstractmethod

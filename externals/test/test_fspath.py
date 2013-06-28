@@ -94,8 +94,8 @@ class TestFsPath(unittest.TestCase):
     @within_temp_dir
     def test_children_returns_list_of_externals_for_children(self):
             x_tempdir = m.working_directory()
-            x_tempdir.child(u'a').create('a content')
-            x_tempdir.child(u'b').create('b content')
+            x_tempdir.child(u'a').set_content('a content')
+            x_tempdir.child(u'b').set_content('b content')
             os.mkdir('c')
 
             x_test = m.working_directory()
@@ -110,8 +110,8 @@ class TestFsPath(unittest.TestCase):
     @within_temp_dir
     def test_external_is_an_iterable_of_its_children(self):
             x_tempdir = m.working_directory()
-            x_tempdir.child(u'a').create('a content')
-            x_tempdir.child(u'b').create('b content')
+            x_tempdir.child(u'a').set_content('a content')
+            x_tempdir.child(u'b').set_content('b content')
             os.mkdir('c')
 
             x_test = m.working_directory()
@@ -128,13 +128,13 @@ class TestFsPath(unittest.TestCase):
             self.assertEqual([u'a', u'b', u'c'], map(name, children))
 
     @within_temp_dir
-    def test_create_creates_missing_directories_and_a_file(self):
+    def test_set_content_creates_missing_directories_and_a_file(self):
             x_tempdir = m.working_directory()
             x_a = x_tempdir.child(u'a')
             x_ab = x_a.child(u'b')
             x_file = x_ab.child(u'c')
 
-            x_file.create('content')
+            x_file.set_content('content')
 
             with open(u'a/b/c') as f:
                 self.assertEqual('content', f.read())
@@ -146,7 +146,7 @@ class TestFsPath(unittest.TestCase):
             x_ab = x_a.child(u'b')
             x_file = x_ab.child(u'c')
 
-            x_file.create('content')
+            x_file.set_content('content')
 
             x_a.remove()
 
@@ -155,7 +155,7 @@ class TestFsPath(unittest.TestCase):
     @within_temp_dir
     def test_adding_a_string_to_an_external_means_asking_for_a_child(self):
             x_tempdir = m.working_directory()
-            x_tempdir.child(u'a').create('child')
+            x_tempdir.child(u'a').set_content('child')
 
             self.assertEqual('child', (x_tempdir / u'a').content())
 
@@ -166,7 +166,7 @@ class TestFsPath(unittest.TestCase):
             (x_tempdir
                 .child(u'dir-a')
                 .child(u'dir-b')
-                .child(u'file')).create('child')
+                .child(u'file')).set_content('child')
 
             self.assertEqual(
                 'child',
@@ -179,7 +179,7 @@ class TestFsPath(unittest.TestCase):
             (x_tempdir
                 .child(u'dir-a')
                 .child(u'dir-b')
-                .child(u'file')).create('child')
+                .child(u'file')).set_content('child')
 
             self.assertEqual(
                 'child',
