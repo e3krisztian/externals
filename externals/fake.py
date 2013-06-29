@@ -58,11 +58,6 @@ class Fake(External):
             raise NoParentError
         return self._new(self._path[:-1])
 
-    def child(self, name):
-        assert PATH_SEPARATOR not in name
-        assert name
-        return self._new(self._path + (name,))
-
     def exists(self):
         try:
             self._node
@@ -75,7 +70,7 @@ class Fake(External):
         return self._path[-1] if self._path else ''
 
     def __div__(self, sub_path):
-        ''' Syntactic sugar for child(u'name1').child(u'name2')...
+        '''Build new externals for contained sub_path
 
         x / u'name'
         x / u'name1/name2/name3'

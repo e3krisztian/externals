@@ -27,10 +27,22 @@ class Hierarchy(object):
     def parent(self):
         pass
 
-    # TODO: Hierarchy.child(name) -> Hierarchy / name
     @abstractmethod
-    def child(self, name):
+    def __div__(self, sub_path):
+        '''Build new externals for contained sub_path
+
+        x / u'name'
+        x / u'name1/name2/name3'
+        '''
         pass
+
+    def __truediv__(self, sub_path):
+        '''Build new externals for contained sub_path
+
+        x / u'name'
+        x / u'name1/name2/name3'
+        '''
+        return self.__div__(sub_path)
 
     @abstractmethod
     def exists(self):
@@ -43,25 +55,8 @@ class External(Hierarchy):
 
     @abstractproperty
     def name(self):
-        ''' Last name '''
+        '''Last name '''
         pass
-
-    @abstractmethod
-    def __div__(self, sub_path):
-        ''' Syntactic sugar for child(u'name1').child(u'name2')...
-
-        x / u'name'
-        x / u'name1/name2/name3'
-        '''
-        pass
-
-    def __truediv__(self, sub_path):
-        ''' Syntactic sugar for child(u'name1').child(u'name2')...
-
-        x / u'name'
-        x / u'name1/name2/name3'
-        '''
-        return self.__div__(sub_path)
 
     @abstractmethod
     def is_file(self):
@@ -126,7 +121,7 @@ def locate(external, name):
     try:
         parent = external
         while True:
-            candidate = parent.child(name)
+            candidate = parent / name
             if candidate.exists():
                 return candidate
             parent = parent.parent()

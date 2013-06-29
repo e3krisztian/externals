@@ -12,7 +12,7 @@ class TestHierarchy(m.Hierarchy):
     def exists(self):
         return self.path in u'/ /a /a/b /a/b/x /a/y /x /.git'.split()
 
-    def child(self, name):
+    def __div__(self, name):
         if self._is_root:
             newpath = u'/' + name
         else:
@@ -36,7 +36,7 @@ class Test_TestHierarchy(unittest.TestCase):
         self.assertEqual(u'/', TestHierarchy(u'/a').parent().path)
 
     def test_child_of_root(self):
-        self.assertEqual(u'/a', TestHierarchy(u'/').child(u'a').path)
+        self.assertEqual(u'/a', (TestHierarchy(u'/') / u'a').path)
 
 
 '''

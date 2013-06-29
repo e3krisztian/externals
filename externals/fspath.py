@@ -20,15 +20,13 @@ class FsPath(External):
             raise NoParentError
         return FsPath(new_path)
 
-    def child(self, name):
-        return FsPath(os.path.join(self._path, name))
-
     def __div__(self, sub_path):
-        ''' Syntactic sugar for child(u'name1').child(u'name2')...
+        '''Build new externals for contained sub_path
 
         x / u'name'
         x / u'name1/name2/name3'
         '''
+        # FIXME: take care of (forbid?) /./ and /../ constructs
         return FsPath(
             os.path.join(
                 self._path,
@@ -63,7 +61,7 @@ class FsPath(External):
 
     def __iter__(self):
         for name in os.listdir(self._path):
-            yield self.child(name)
+            yield self / name
 
     def remove(self):
         shutil.rmtree(self._path)
