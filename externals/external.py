@@ -62,13 +62,8 @@ class External(Hierarchy):
     def is_file(self):
         pass
 
-    @abstractmethod
+    @abstractproperty
     def content(self):
-        pass
-
-    @abstractmethod
-    def set_content(self, content):
-        ''' Creates the file, creates missing directories up to the file '''
         pass
 
     @abstractmethod

@@ -75,23 +75,23 @@ class Test_Fake(unittest.TestCase):
 
     def test_existing_child_exists(self):
         x = m.Fake() / 'b'
-        x.set_content('b content')
+        x.content = 'b content'
         self.assertTrue(x.exists())
 
     def test_content(self):
         x = m.Fake() / 'b'
-        x.set_content('b content')
-        self.assertEqual('b content', x.content())
+        x.content = 'b content'
+        self.assertEqual('b content', x.content)
 
     def test_nodes_on_the_path_to_existing_content_exist(self):
         a = m.Fake() / 'a'
         b = a / 'b'
-        b.set_content('a/b content')
+        b.content = 'a/b content'
         self.assertTrue(a.exists())
 
     def test_node_with_content_is_file(self):
         x = m.Fake() / 'b'
-        x.set_content('b content')
+        x.content = 'b content'
         self.assertTrue(x.is_file())
 
     def test_nonexisting_node_is_not_file(self):
@@ -100,7 +100,7 @@ class Test_Fake(unittest.TestCase):
 
     def test_parent_of_file_is_dir(self):
         x = m.Fake() / 'a' / 'b'
-        x.set_content('a/b content')
+        x.content = 'a/b content'
         self.assertTrue(x.parent().is_dir())
 
     def test_new_instance_is_neither_a_file_nor_a_dir(self):
@@ -110,7 +110,7 @@ class Test_Fake(unittest.TestCase):
 
     def test_readable_stream(self):
         x = m.Fake()
-        x.set_content('I am root')
+        x.content = 'I am root'
         with x.readable_stream() as f:
             self.assertEqual('I am root', f.read())
 
@@ -120,52 +120,52 @@ class Test_Fake(unittest.TestCase):
             f.write('FILE')
             f.write('1')
             f.write('23')
-        self.assertEqual('FILE123', x.content())
+        self.assertEqual('FILE123', x.content)
 
     def test_children(self):
         x = m.Fake()
-        (x / 'a' / 'b').set_content('content of a/b')
-        (x / 'x').set_content('content of x')
+        (x / 'a' / 'b').content = 'content of a/b'
+        (x / 'x').content = 'content of x'
 
         def name(x):
             return x.name
         a, x = sorted(x.children(), key=name)
 
         self.assertEqual('a', a.name)
-        self.assertEqual('content of x', x.content())
+        self.assertEqual('content of x', x.content)
 
     def test_remove_root_removes_all_contents(self):
         root = m.Fake()
-        root.set_content('root')
+        root.content = 'root'
         ab = root / 'a' / 'b'
-        ab.set_content('content of a/b')
+        ab.content = 'content of a/b'
 
         root.remove()
 
         with self.assertRaises(KeyError):
-            root.content()
+            root.content
         self.assertFalse(ab.exists())
 
     def test_remove_a_non_root(self):
         root = m.Fake()
-        root.set_content('root')
+        root.content = 'root'
         x = root / '1'
         ab = x / 'a' / 'b'
-        ab.set_content('content of a/b')
+        ab.content = 'content of a/b'
 
         x.remove()
 
         self.assertFalse(ab.exists())
-        self.assertTrue('root', root.content())
+        self.assertTrue('root', root.content)
         with self.assertRaises(KeyError):
-            ab.content()
+            ab.content
 
     def test_nonexistent_path_is_not_a_directory(self):
         self.assertFalse((m.Fake() / 'a').is_dir())
 
     def test_remove_nonexistent_path(self):
         root = m.Fake()
-        (root / 'x').set_content('expect to remain')
+        (root / 'x').content = 'expect to remain'
         (root / 'a').remove()
 
-        self.assertEqual('expect to remain', (root / 'x').content())
+        self.assertEqual('expect to remain', (root / 'x').content)

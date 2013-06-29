@@ -83,16 +83,22 @@ class Fake(External):
         except KeyError:
             return False
 
-    def content(self):
-        return self._node[KEY_CONTENT]
+    # .content
+    def content():
+        def fget(self):
+            return self._node[KEY_CONTENT]
 
-    def set_content(self, content):
-        '''Create file with content and missing directories up to the file'''
-        self._fs.ensure(self._path)
-        self._node[KEY_CONTENT] = content
+        def fset(self, value):
+            # Create file with content and missing directories up to the file
+            self._fs.ensure(self._path)
+            self._node[KEY_CONTENT] = value
+        return locals()
+    content = property(
+        doc='read/write property for accessing the content of "files"',
+        **content())
 
     def readable_stream(self):
-        return contextlib.closing(StringIO(self.content()))
+        return contextlib.closing(StringIO(self.content))
 
     def writable_stream(self):
         return contextlib.closing(WritableStream(self))
@@ -126,4 +132,4 @@ class WritableStream(StringIO):
     def close(self):
         content = self.getvalue()
         StringIO.close(self)
-        self.__external.set_content(content)
+        self.__external.content = content

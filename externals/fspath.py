@@ -38,17 +38,24 @@ class FsPath(External):
     def is_file(self):
         return os.path.isfile(self._path)
 
-    def content(self):
-        with self.readable_stream() as f:
-            return f.read()
+    # .content
+    def content():
+        def fget(self):
+            with self.readable_stream() as f:
+                return f.read()
 
-    def set_content(self, content):
-        parent, tail = os.path.split(self._path)
-        if not os.path.exists(parent):
-            os.makedirs(parent)
+        def fset(self, value):
+            parent, tail = os.path.split(self._path)
+            if not os.path.exists(parent):
+                os.makedirs(parent)
 
-        with self.writable_stream() as f:
-            f.write(content)
+            with self.writable_stream() as f:
+                f.write(value)
+
+        return locals()
+    content = property(
+        doc='read/write property for accessing the content of "files"',
+        **content())
 
     def readable_stream(self):
         return open(self._path, 'rb')
