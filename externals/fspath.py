@@ -23,8 +23,8 @@ class FsPath(External):
     def __div__(self, sub_path):
         '''Build new externals for contained sub_path
 
-        x / u'name'
-        x / u'name1/name2/name3'
+        x / 'name'
+        x / 'name1/name2/name3'
         '''
         # FIXME: take care of (forbid?) /./ and /../ constructs
         return FsPath(
@@ -51,10 +51,10 @@ class FsPath(External):
             f.write(content)
 
     def readable_stream(self):
-        return open(self._path, u'rb')
+        return open(self._path, 'rb')
 
     def writable_stream(self):
-        return open(self._path, u'wb')
+        return open(self._path, 'wb')
 
     def is_dir(self):
         return os.path.isdir(self._path)

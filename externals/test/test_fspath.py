@@ -8,13 +8,13 @@ import externals.fspath as m
 class TestFsPath(unittest.TestCase):
 
     def test_parent_of_root_exception(self):
-        x = m.FsPath(u'/')
+        x = m.FsPath('/')
         with self.assertRaises(m.NoParentError):
             x.parent()
 
     def test_child_of_root_has_a_parent(self):
-        x = m.FsPath(u'/')
-        child = x / u'stem'
+        x = m.FsPath('/')
+        child = x / 'stem'
         child.parent()
 
     def test_this_file_exists(self):
@@ -34,21 +34,21 @@ class TestFsPath(unittest.TestCase):
         self.assertFalse(x.is_dir())
 
     def test_root_is_not_a_file(self):
-        x = m.FsPath(u'/')
+        x = m.FsPath('/')
         self.assertFalse(x.is_file())
 
     def test_root_is_a_directory(self):
-        x = m.FsPath(u'/')
+        x = m.FsPath('/')
         self.assertTrue(x.is_dir())
 
     def test_name_is_last_segment_of_path(self):
-        x = m.FsPath(u'/a/last')
-        self.assertEqual(u'last', x.name)
+        x = m.FsPath('/a/last')
+        self.assertEqual('last', x.name)
 
     @within_temp_dir
     def test_content_returns_file_content(self):
-            filename = u'test-file1'
-            with open(filename, u'wb') as f:
+            filename = 'test-file1'
+            with open(filename, 'wb') as f:
                 f.write('something\nand more')
 
             x = m.FsPath(filename)
@@ -57,7 +57,7 @@ class TestFsPath(unittest.TestCase):
 
     @within_temp_dir
     def test_set_content_stores_data(self):
-            filename = u'test-file2'
+            filename = 'test-file2'
 
             x_store = m.FsPath(filename)
             x_store.set_content('something2\nand more')
@@ -67,7 +67,7 @@ class TestFsPath(unittest.TestCase):
 
     @within_temp_dir
     def test_readable_stream_returns_an_open_file(self):
-            filename = u'test-file3'
+            filename = 'test-file3'
 
             x_store = m.FsPath(filename)
             x_store.set_content('something3')
@@ -82,20 +82,20 @@ class TestFsPath(unittest.TestCase):
     def test_writable_stream_returns_an_open_file(self):
             x_tempdir = m.working_directory()
 
-            x_store = x_tempdir / u'test-file'
+            x_store = x_tempdir / 'test-file'
             with x_store.writable_stream() as stream:
                 stream.write('s')
                 stream.write('o')
                 stream.write('mething4')
 
-            x_read = x_tempdir / u'test-file'
+            x_read = x_tempdir / 'test-file'
             self.assertEqual('something4', x_read.content())
 
     @within_temp_dir
     def test_children_returns_list_of_externals_for_children(self):
             x_tempdir = m.working_directory()
-            (x_tempdir / u'a').set_content('a content')
-            (x_tempdir / u'b').set_content('b content')
+            (x_tempdir / 'a').set_content('a content')
+            (x_tempdir / 'b').set_content('b content')
             os.mkdir('c')
 
             x_test = m.working_directory()
@@ -105,13 +105,13 @@ class TestFsPath(unittest.TestCase):
             children = sorted(x_test.children(), key=name)
 
             self.assertEqual(3, len(children))
-            self.assertEqual([u'a', u'b', u'c'], map(name, children))
+            self.assertEqual(['a', 'b', 'c'], map(name, children))
 
     @within_temp_dir
     def test_external_is_an_iterable_of_its_children(self):
             x_tempdir = m.working_directory()
-            (x_tempdir / u'a').set_content('a content')
-            (x_tempdir / u'b').set_content('b content')
+            (x_tempdir / 'a').set_content('a content')
+            (x_tempdir / 'b').set_content('b content')
             os.mkdir('c')
 
             x_test = m.working_directory()
@@ -125,26 +125,26 @@ class TestFsPath(unittest.TestCase):
             children = sorted(x_test.children(), key=name)
 
             self.assertEqual(3, len(children))
-            self.assertEqual([u'a', u'b', u'c'], map(name, children))
+            self.assertEqual(['a', 'b', 'c'], map(name, children))
 
     @within_temp_dir
     def test_set_content_creates_missing_directories_and_a_file(self):
             x_tempdir = m.working_directory()
-            x_a = x_tempdir / u'a'
-            x_ab = x_a / u'b'
-            x_file = x_ab / u'c'
+            x_a = x_tempdir / 'a'
+            x_ab = x_a / 'b'
+            x_file = x_ab / 'c'
 
             x_file.set_content('content')
 
-            with open(u'a/b/c') as f:
+            with open('a/b/c') as f:
                 self.assertEqual('content', f.read())
 
     @within_temp_dir
     def test_directory_with_subdir_is_removed(self):
             x_tempdir = m.working_directory()
-            x_a = x_tempdir / u'a'
-            x_ab = x_a / u'b'
-            x_file = x_ab / u'c'
+            x_a = x_tempdir / 'a'
+            x_ab = x_a / 'b'
+            x_file = x_ab / 'c'
 
             x_file.set_content('content')
 
@@ -155,29 +155,29 @@ class TestFsPath(unittest.TestCase):
     @within_temp_dir
     def test_adding_a_string_to_an_external_means_asking_for_a_child(self):
             x_tempdir = m.working_directory()
-            (x_tempdir / u'a').set_content('child')
+            (x_tempdir / 'a').set_content('child')
 
-            self.assertEqual('child', (x_tempdir / u'a').content())
+            self.assertEqual('child', (x_tempdir / 'a').content())
 
     @within_temp_dir
     def test_add_a_path(self):
             x_tempdir = m.working_directory()
             # file dir-a/dir-b/file
-            (x_tempdir / u'dir-a' / u'dir-b' / u'file').set_content('child')
+            (x_tempdir / 'dir-a' / 'dir-b' / 'file').set_content('child')
 
             self.assertEqual(
                 'child',
-                (x_tempdir / u'dir-a/dir-b/file').content())
+                (x_tempdir / 'dir-a/dir-b/file').content())
 
     @within_temp_dir
     def test_add_a_path_wrapped_in_slashes(self):
             x_tempdir = m.working_directory()
             # file dir-a/dir-b/file
-            (x_tempdir / u'dir-a' / u'dir-b' / u'file').set_content('child')
+            (x_tempdir / 'dir-a' / 'dir-b' / 'file').set_content('child')
 
             self.assertEqual(
                 'child',
-                (x_tempdir / u'/dir-a/dir-b/file/').content())
+                (x_tempdir / '/dir-a/dir-b/file/').content())
 
 
 class Test_working_directory(unittest.TestCase):

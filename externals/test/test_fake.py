@@ -100,7 +100,7 @@ class Test_Fake(unittest.TestCase):
 
     def test_parent_of_file_is_dir(self):
         x = m.Fake() / 'a' / 'b'
-        x.set_content(u'a/b content')
+        x.set_content('a/b content')
         self.assertTrue(x.parent().is_dir())
 
     def test_new_instance_is_neither_a_file_nor_a_dir(self):
@@ -110,17 +110,17 @@ class Test_Fake(unittest.TestCase):
 
     def test_readable_stream(self):
         x = m.Fake()
-        x.set_content(u'I am root')
+        x.set_content('I am root')
         with x.readable_stream() as f:
-            self.assertEqual(u'I am root', f.read())
+            self.assertEqual('I am root', f.read())
 
     def test_writable_stream(self):
         x = m.Fake() / 'file123'
         with x.writable_stream() as f:
-            f.write(u'FILE')
-            f.write(u'1')
-            f.write(u'23')
-        self.assertEqual(u'FILE123', x.content())
+            f.write('FILE')
+            f.write('1')
+            f.write('23')
+        self.assertEqual('FILE123', x.content())
 
     def test_children(self):
         x = m.Fake()

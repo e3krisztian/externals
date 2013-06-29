@@ -31,16 +31,16 @@ class Hierarchy(object):
     def __div__(self, sub_path):
         '''Build new externals for contained sub_path
 
-        x / u'name'
-        x / u'name1/name2/name3'
+        x / 'name'
+        x / 'name1/name2/name3'
         '''
         pass
 
     def __truediv__(self, sub_path):
         '''Build new externals for contained sub_path
 
-        x / u'name'
-        x / u'name1/name2/name3'
+        x / 'name'
+        x / 'name1/name2/name3'
         '''
         return self.__div__(sub_path)
 

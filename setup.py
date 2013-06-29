@@ -10,9 +10,9 @@ setup(
     name='externals',
     version='0.2dev',
     description=(
-        u'A light abstraction of hierarchically named resources,'
-        u' potentially external to the current process'),
-    author=u'Krisztián Fekete',
+        'A light abstraction of hierarchically named resources,'
+        ' potentially external to the current process'),
+    author='Krisztián Fekete',
     author_email='fekete.krisztyan@gmail.com',
     url='http://maybe.later',
     packages=['externals'],
