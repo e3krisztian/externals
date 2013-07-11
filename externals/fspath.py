@@ -7,15 +7,15 @@ import shutil
 class FsPath(External):
 
     def __init__(self, path):
-        self._path = os.path.realpath(path)
+        self.path = os.path.realpath(path)
 
     @property
     def name(self):
-        parent, tail = os.path.split(self._path)
+        parent, tail = os.path.split(self.path)
         return tail
 
     def parent(self):
-        new_path, tail = os.path.split(self._path)
+        new_path, tail = os.path.split(self.path)
         if not tail:
             raise NoParentError
         return FsPath(new_path)
@@ -29,14 +29,14 @@ class FsPath(External):
         # FIXME: take care of (forbid?) /./ and /../ constructs
         return FsPath(
             os.path.join(
-                self._path,
+                self.path,
                 sub_path.strip(os.path.sep)))
 
     def exists(self):
-        return os.path.exists(self._path)
+        return os.path.exists(self.path)
 
     def is_file(self):
-        return os.path.isfile(self._path)
+        return os.path.isfile(self.path)
 
     # .content
     def content():
@@ -45,7 +45,7 @@ class FsPath(External):
                 return f.read()
 
         def fset(self, value):
-            parent, tail = os.path.split(self._path)
+            parent, tail = os.path.split(self.path)
             if not os.path.exists(parent):
                 os.makedirs(parent)
 
@@ -58,20 +58,20 @@ class FsPath(External):
         **content())
 
     def readable_stream(self):
-        return open(self._path, 'rb')
+        return open(self.path, 'rb')
 
     def writable_stream(self):
-        return open(self._path, 'wb')
+        return open(self.path, 'wb')
 
     def is_dir(self):
-        return os.path.isdir(self._path)
+        return os.path.isdir(self.path)
 
     def __iter__(self):
-        for name in os.listdir(self._path):
+        for name in os.listdir(self.path):
             yield self / name
 
     def remove(self):
-        shutil.rmtree(self._path)
+        shutil.rmtree(self.path)
 
 
 def working_directory():

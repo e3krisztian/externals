@@ -190,4 +190,4 @@ class Test_working_directory(unittest.TestCase):
             x1 = m.working_directory()
             with in_temp_dir():
                 x2 = m.working_directory()
-                self.assertNotEqual(x1._path, x2._path)
+                self.assertNotEqual(x1.path, x2.path)
