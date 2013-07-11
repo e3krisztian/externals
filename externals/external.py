@@ -107,11 +107,11 @@ def locate(external, name):
          \
           .git
 
-    External( /a/b ).locate(   'b'  ) is External( /a/b   )
-    External( /a/b ).locate(   'x'  ) is External( /a/b/x )
-    External( /a   ).locate(   'x'  ) is External( /x     )
-    External( /a/b ).locate(   'y'  ) is External( /a/y   )
-    External( /a/b ).locate( '.git' ) is External( /.git  )
+    locate(External( /a/b ),   'b'  ) is External( /a/b   )
+    locate(External( /a/b ),   'x'  ) is External( /a/b/x )
+    locate(External( /a   ),   'x'  ) is External( /x     )
+    locate(External( /a/b ),   'y'  ) is External( /a/y   )
+    locate(External( /a/b ), '.git' ) is External( /.git  )
     '''
     try:
         parent = external
