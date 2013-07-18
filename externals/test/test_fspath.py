@@ -3,6 +3,8 @@ import unittest
 import os
 from temp_dir import in_temp_dir, within_temp_dir
 import externals.fspath as m
+from externals.test import mixins
+import contextlib
 
 
 class TestFsPath(unittest.TestCase):
@@ -191,3 +193,13 @@ class Test_working_directory(unittest.TestCase):
             with in_temp_dir():
                 x2 = m.working_directory()
                 self.assertNotEqual(x1.path, x2.path)
+
+
+class Test_FsPath_copy_to(unittest.TestCase, mixins.External_copy_to__multiread_mixin):
+
+    @contextlib.contextmanager
+    def external(self):
+        with in_temp_dir():
+            x = m.working_directory() / 'temporary file'
+            x.content = 'something smallish'
+            yield x

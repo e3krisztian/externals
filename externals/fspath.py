@@ -73,6 +73,20 @@ class FsPath(External):
     def remove(self):
         shutil.rmtree(self.path)
 
+    MAX_BLOCK_SIZE = 1 * 1024 ** 2
+
+    def copy_to(self, other):
+        max_block_size = self.MAX_BLOCK_SIZE
+        with self.readable_stream() as source:
+            with other.writable_stream() as destination:
+                try:
+                    while True:
+                        block = source.read(max_block_size)
+                        if block == '':
+                            break
+                        destination.write(block)
+                except EOFError:
+                    pass
 
 def working_directory():
     return FsPath('.')

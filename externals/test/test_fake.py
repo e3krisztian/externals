@@ -2,6 +2,7 @@
 import unittest
 import externals.fake as m
 from externals.test import mixins
+import contextlib
 
 
 ROOT_PATH = ()
@@ -175,8 +176,8 @@ class Test_Fake(unittest.TestCase):
 
 class Test_copy_to(unittest.TestCase, mixins.External_copy_to__mixin):
 
-    @property
+    @contextlib.contextmanager
     def external(self):
         x = m.Fake()
         x.content = 'small content'
-        return x
+        yield x
