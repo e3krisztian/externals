@@ -3,7 +3,7 @@ import unittest
 import externals.external as m
 
 
-class TestHierarchy(m.Hierarchy):
+class Hierarchy(m.Hierarchy):
 
     def __init__(self, path):
         self.path = path
@@ -30,13 +30,13 @@ class Test_TestHierarchy(unittest.TestCase):
 
     def test_parent_of_root_raises_error(self):
         with self.assertRaises(m.NoParentError):
-            TestHierarchy('/').parent()
+            Hierarchy('/').parent()
 
     def test_parent_of_a_is_root(self):
-        self.assertEqual('/', TestHierarchy('/a').parent().path)
+        self.assertEqual('/', Hierarchy('/a').parent().path)
 
     def test_child_of_root(self):
-        self.assertEqual('/a', (TestHierarchy('/') / 'a').path)
+        self.assertEqual('/a', (Hierarchy('/') / 'a').path)
 
 
 '''
@@ -61,7 +61,7 @@ locate(External( /a/b ), '.git' ) is External( /.git  )
 class Test_locate(unittest.TestCase):
 
     def check(self, expected, orig, name):
-        self.assertEqual(expected, m.locate(TestHierarchy(orig), name).path)
+        self.assertEqual(expected, m.locate(Hierarchy(orig), name).path)
 
     def test_locate_ab_b_is_ab(self):
         self.check('/a/b', '/a/b', 'b')
@@ -80,4 +80,4 @@ class Test_locate(unittest.TestCase):
 
     def test_locate_ab_z_raises_NotFoundError(self):
         with self.assertRaises(m.NotFoundError):
-            m.locate(TestHierarchy('/a/b'), 'z')
+            m.locate(Hierarchy('/a/b'), 'z')
