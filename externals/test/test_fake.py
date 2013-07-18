@@ -1,6 +1,8 @@
 # coding: utf8
 import unittest
 import externals.fake as m
+from externals.test import mixins
+
 
 ROOT_PATH = ()
 
@@ -169,3 +171,12 @@ class Test_Fake(unittest.TestCase):
         (root / 'a').remove()
 
         self.assertEqual('expect to remain', (root / 'x').content)
+
+
+class Test_copy_to(unittest.TestCase, mixins.External_copy_to__mixin):
+
+    @property
+    def external(self):
+        x = m.Fake()
+        x.content = 'small content'
+        return x

@@ -90,6 +90,9 @@ class External(Hierarchy):
     def remove(self):
         pass
 
+    def copy_to(self, other):
+        other.content = self.content
+
 
 def locate(external, name):
     ''' The longest existing path, that ends in :name: and shares all, but
