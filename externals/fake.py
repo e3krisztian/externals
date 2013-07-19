@@ -43,8 +43,7 @@ class Fake(External):
 
     def __init__(self, fs=None, path=None):
         self._fs = fs or FS()
-        self._path = path or ()
-        assert isinstance(self._path, tuple)
+        self._path = tuple(part for part in path if part) if path else ()
 
     @property
     def _node(self):

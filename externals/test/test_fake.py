@@ -173,6 +173,21 @@ class Test_Fake(unittest.TestCase):
 
         self.assertEqual('expect to remain', (root / 'x').content)
 
+    def test_slashes_as_first_characters_are_ignored(self):
+        root = m.Fake()
+        content = 'a /a and //a'
+        (root / 'a').content = content
+
+        self.assertEqual(content, (root / '/a').content)
+        self.assertEqual(content, (root / '//a').content)
+
+    def test_extra_slashes_ignored(self):
+        root = m.Fake()
+        content = 'a/b a//b/'
+        (root / 'a/b').content = content
+
+        self.assertEqual(content, (root / 'a//b/').content)
+
 
 class Test_copy_to(unittest.TestCase, mixins.External_copy_to__mixin):
 
