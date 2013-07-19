@@ -88,5 +88,6 @@ class FsPath(External):
                 except EOFError:
                     pass
 
+
 def working_directory():
     return FsPath('.')

@@ -17,6 +17,9 @@ setup(
     url='http://maybe.later',
     packages=['externals'],
     install_requires=[],
-    tests_require=['temp_dir >=0.1', 'nose >=1.3'],
+    tests_require=[
+        'temp_dir >=0.1',
+        'nose >=1.3',
+        'mock>1.0'],
     test_suite='nose.collector',
     )

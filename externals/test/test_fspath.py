@@ -195,7 +195,9 @@ class Test_working_directory(unittest.TestCase):
                 self.assertNotEqual(x1.path, x2.path)
 
 
-class Test_FsPath_copy_to(unittest.TestCase, mixins.External_copy_to__multiread_mixin):
+class Test_FsPath_copy_to(
+        unittest.TestCase,
+        mixins.External_copy_to__multiread_mixin):
 
     @contextlib.contextmanager
     def external(self):
