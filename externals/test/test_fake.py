@@ -54,7 +54,7 @@ class Test_FS(unittest.TestCase):
         self.assertPathExists(fs, path2)
 
 
-class Test_Fake(unittest.TestCase):
+class TestRoot(unittest.TestCase):
 
     def _get_root(self):
         return m.Fake()
@@ -67,15 +67,18 @@ class Test_Fake(unittest.TestCase):
         with self.assertRaises(m.NoParentError):
             self._get_root().parent()
 
+    def test_root_exists(self):
+        self.assertTrue(self._get_root().exists())
+
+
+class Test_Fake(unittest.TestCase):
+
     def test_name(self):
         self.assertEqual('a name', (m.Fake() / 'a name').name)
 
     def test_nonexistent_child_does_not_exists(self):
         x = m.Fake() / 'nonexistent'
         self.assertFalse(x.exists())
-
-    def test_root_exists(self):
-        self.assertTrue(self._get_root().exists())
 
     def test_existing_child_exists(self):
         x = m.Fake() / 'b'
