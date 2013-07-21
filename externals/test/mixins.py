@@ -8,7 +8,7 @@ class External_copy_to__mixin(object):
     __metaclass__ = abc.ABCMeta
 
     @abc.abstractmethod
-    def external(self):
+    def external(self):  # pragma: no cover
         '''\
         I should return a `context manager`, whose value is the temporary
           external
