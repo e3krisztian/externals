@@ -9,14 +9,15 @@ import contextlib
 
 class TestFsPath(unittest.TestCase):
 
+    def _get_root(self):
+        return m.FsPath('/')
+
     def test_parent_of_root_exception(self):
-        x = m.FsPath('/')
         with self.assertRaises(m.NoParentError):
-            x.parent()
+            self._get_root().parent()
 
     def test_child_of_root_has_a_parent(self):
-        x = m.FsPath('/')
-        child = x / 'stem'
+        child = self._get_root() / 'stem'
         child.parent()
 
     def test_this_file_exists(self):
@@ -36,12 +37,10 @@ class TestFsPath(unittest.TestCase):
         self.assertFalse(x.is_dir())
 
     def test_root_is_not_a_file(self):
-        x = m.FsPath('/')
-        self.assertFalse(x.is_file())
+        self.assertFalse(self._get_root().is_file())
 
     def test_root_is_a_directory(self):
-        x = m.FsPath('/')
-        self.assertTrue(x.is_dir())
+        self.assertTrue(self._get_root().is_dir())
 
     def test_name_is_last_segment_of_path(self):
         x = m.FsPath('/a/last')
