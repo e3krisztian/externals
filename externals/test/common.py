@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from abc import ABCMeta, abstractmethod
-import externals.fspath as m
+from externals import external
 
 
 class RootTests(object):
@@ -12,7 +12,7 @@ class RootTests(object):
         pass
 
     def test_parent_of_root_exception(self):
-        with self.assertRaises(m.NoParentError):
+        with self.assertRaises(external.NoParentError):
             self._get_root().parent()
 
     def test_child_of_root_has_a_parent(self):
