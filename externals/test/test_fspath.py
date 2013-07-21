@@ -3,27 +3,13 @@ import unittest
 import os
 from temp_dir import in_temp_dir, within_temp_dir
 import externals.fspath as m
-from externals.test import mixins
+from externals.test import mixins, common
 import contextlib
 
 
-class TestRoot(unittest.TestCase):
+class TestRoot(unittest.TestCase, common.RootTests):
     def _get_root(self):
         return m.FsPath('/')
-
-    def test_parent_of_root_exception(self):
-        with self.assertRaises(m.NoParentError):
-            self._get_root().parent()
-
-    def test_child_of_root_has_a_parent(self):
-        child = self._get_root() / 'stem'
-        child.parent()
-
-    def test_root_is_not_a_file(self):
-        self.assertFalse(self._get_root().is_file())
-
-    def test_root_is_a_directory(self):
-        self.assertTrue(self._get_root().is_dir())
 
 
 class TestFsPath(unittest.TestCase):
