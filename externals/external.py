@@ -24,11 +24,11 @@ class Hierarchy(object):
     __metaclass__ = ABCMeta
 
     @abstractmethod
-    def parent(self):
+    def parent(self):  # pragma: no cover
         pass
 
     @abstractmethod
-    def __div__(self, sub_path):
+    def __div__(self, sub_path):  # pragma: no cover
         '''Build new externals for contained sub_path
 
         x / 'name'
@@ -36,7 +36,7 @@ class Hierarchy(object):
         '''
         pass
 
-    def __truediv__(self, sub_path):
+    def __truediv__(self, sub_path):  # pragma: no cover
         '''Build new externals for contained sub_path
 
         x / 'name'
@@ -45,7 +45,7 @@ class Hierarchy(object):
         return self.__div__(sub_path)
 
     @abstractmethod
-    def exists(self):
+    def exists(self):  # pragma: no cover
         pass
 
 
@@ -54,40 +54,40 @@ class External(Hierarchy):
     __metaclass__ = ABCMeta
 
     @abstractproperty
-    def name(self):
+    def name(self):  # pragma: no cover
         '''Last name '''
         pass
 
     @abstractmethod
-    def is_file(self):
+    def is_file(self):  # pragma: no cover
         pass
 
     @abstractproperty
-    def content(self):
+    def content(self):  # pragma: no cover
         pass
 
     @abstractmethod
-    def readable_stream(self):
+    def readable_stream(self):  # pragma: no cover
         pass
 
     @abstractmethod
-    def writable_stream(self):
+    def writable_stream(self):  # pragma: no cover
         pass
 
     @abstractmethod
-    def is_dir(self):
+    def is_dir(self):  # pragma: no cover
         pass
 
     def children(self):
         return list(self)
 
     @abstractmethod
-    def __iter__(self):
+    def __iter__(self):  # pragma: no cover
         ''' Iterator over children '''
         pass
 
     @abstractmethod
-    def remove(self):
+    def remove(self):  # pragma: no cover
         pass
 
     def copy_to(self, other):
