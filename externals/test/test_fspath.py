@@ -24,20 +24,17 @@ class TestFsPath(unittest.TestCase):
         child.parent()
 
     def test_this_file_exists(self):
-        x = self._get_existing_file()
-        self.assertTrue(x.exists())
+        self.assertTrue(self._get_existing_file().exists())
 
     def test_nonexistent_child_does_not_exists(self):
         x = m.FsPath(__file__) / 'nonexistent'
         self.assertFalse(x.exists())
 
     def test_this_file_is_a_file(self):
-        x = self._get_existing_file()
-        self.assertTrue(x.is_file())
+        self.assertTrue(self._get_existing_file().is_file())
 
     def test_this_file_is_not_a_directory(self):
-        x = self._get_existing_file()
-        self.assertFalse(x.is_dir())
+        self.assertFalse(self._get_existing_file().is_dir())
 
     def test_root_is_not_a_file(self):
         self.assertFalse(self._get_root().is_file())
