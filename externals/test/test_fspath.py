@@ -12,6 +12,9 @@ class TestFsPath(unittest.TestCase):
     def _get_root(self):
         return m.FsPath('/')
 
+    def _get_existing_file(self):
+        return m.FsPath(__file__)
+
     def test_parent_of_root_exception(self):
         with self.assertRaises(m.NoParentError):
             self._get_root().parent()
@@ -21,7 +24,7 @@ class TestFsPath(unittest.TestCase):
         child.parent()
 
     def test_this_file_exists(self):
-        x = m.FsPath(__file__)
+        x = self._get_existing_file()
         self.assertTrue(x.exists())
 
     def test_nonexistent_child_does_not_exists(self):
@@ -29,11 +32,11 @@ class TestFsPath(unittest.TestCase):
         self.assertFalse(x.exists())
 
     def test_this_file_is_a_file(self):
-        x = m.FsPath(__file__)
+        x = self._get_existing_file()
         self.assertTrue(x.is_file())
 
     def test_this_file_is_not_a_directory(self):
-        x = m.FsPath(__file__)
+        x = self._get_existing_file()
         self.assertFalse(x.is_dir())
 
     def test_root_is_not_a_file(self):
