@@ -1,7 +1,7 @@
 # coding: utf8
 import unittest
 import externals.fake as m
-from externals.test import mixins
+from externals.test import mixins, common
 import contextlib
 
 
@@ -54,17 +54,13 @@ class Test_FS(unittest.TestCase):
         self.assertPathExists(fs, path2)
 
 
+class TestFakeRoot(unittest.TestCase, common.RootTests):
+
+    def _get_root(self):
+        return m.Fake()
+
+
 class Test_Fake(unittest.TestCase):
-
-    def test_child_of_root_has_a_parent(self):
-        x = m.Fake()
-        child = x / 'a'
-        child.parent()
-
-    def test_root_has_no_parent(self):
-        x = m.Fake()
-        with self.assertRaises(m.NoParentError):
-            x.parent()
 
     def test_name(self):
         self.assertEqual('a name', (m.Fake() / 'a name').name)
@@ -72,9 +68,6 @@ class Test_Fake(unittest.TestCase):
     def test_nonexistent_child_does_not_exists(self):
         x = m.Fake() / 'nonexistent'
         self.assertFalse(x.exists())
-
-    def test_root_exists(self):
-        self.assertTrue(m.Fake().exists())
 
     def test_existing_child_exists(self):
         x = m.Fake() / 'b'
@@ -105,11 +98,6 @@ class Test_Fake(unittest.TestCase):
         x = m.Fake() / 'a' / 'b'
         x.content = 'a/b content'
         self.assertTrue(x.parent().is_dir())
-
-    def test_new_instance_is_neither_a_file_nor_a_dir(self):
-        x = m.Fake()
-        self.assertFalse(x.is_file())
-        self.assertFalse(x.is_dir())
 
     def test_readable_stream(self):
         x = m.Fake()

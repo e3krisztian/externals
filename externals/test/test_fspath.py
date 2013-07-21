@@ -3,45 +3,32 @@ import unittest
 import os
 from temp_dir import in_temp_dir, within_temp_dir
 import externals.fspath as m
-from externals.test import mixins
+from externals.test import mixins, common
 import contextlib
+
+
+class TestFsRoot(unittest.TestCase, common.RootTests):
+    def _get_root(self):
+        return m.FsPath('/')
 
 
 class TestFsPath(unittest.TestCase):
 
-    def test_parent_of_root_exception(self):
-        x = m.FsPath('/')
-        with self.assertRaises(m.NoParentError):
-            x.parent()
-
-    def test_child_of_root_has_a_parent(self):
-        x = m.FsPath('/')
-        child = x / 'stem'
-        child.parent()
+    def _get_existing_file(self):
+        return m.FsPath(__file__)
 
     def test_this_file_exists(self):
-        x = m.FsPath(__file__)
-        self.assertTrue(x.exists())
+        self.assertTrue(self._get_existing_file().exists())
 
     def test_nonexistent_child_does_not_exists(self):
         x = m.FsPath(__file__) / 'nonexistent'
         self.assertFalse(x.exists())
 
     def test_this_file_is_a_file(self):
-        x = m.FsPath(__file__)
-        self.assertTrue(x.is_file())
+        self.assertTrue(self._get_existing_file().is_file())
 
     def test_this_file_is_not_a_directory(self):
-        x = m.FsPath(__file__)
-        self.assertFalse(x.is_dir())
-
-    def test_root_is_not_a_file(self):
-        x = m.FsPath('/')
-        self.assertFalse(x.is_file())
-
-    def test_root_is_a_directory(self):
-        x = m.FsPath('/')
-        self.assertTrue(x.is_dir())
+        self.assertFalse(self._get_existing_file().is_dir())
 
     def test_name_is_last_segment_of_path(self):
         x = m.FsPath('/a/last')
