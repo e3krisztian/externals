@@ -7,7 +7,7 @@ from externals.test import mixins, common
 import contextlib
 
 
-class TestRoot(unittest.TestCase, common.RootTests):
+class TestFsRoot(unittest.TestCase, common.RootTests):
     def _get_root(self):
         return m.FsPath('/')
 
