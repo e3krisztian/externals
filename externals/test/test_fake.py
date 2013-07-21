@@ -1,7 +1,7 @@
 # coding: utf8
 import unittest
 import externals.fake as m
-from externals.test import mixins
+from externals.test import mixins, common
 import contextlib
 
 
@@ -54,21 +54,10 @@ class Test_FS(unittest.TestCase):
         self.assertPathExists(fs, path2)
 
 
-class TestRoot(unittest.TestCase):
+class TestFakeRoot(unittest.TestCase, common.RootTests):
 
     def _get_root(self):
         return m.Fake()
-
-    def test_child_of_root_has_a_parent(self):
-        child = self._get_root() / 'a'
-        child.parent()
-
-    def test_root_has_no_parent(self):
-        with self.assertRaises(m.NoParentError):
-            self._get_root().parent()
-
-    def test_root_exists(self):
-        self.assertTrue(self._get_root().exists())
 
 
 class Test_Fake(unittest.TestCase):
@@ -109,11 +98,6 @@ class Test_Fake(unittest.TestCase):
         x = m.Fake() / 'a' / 'b'
         x.content = 'a/b content'
         self.assertTrue(x.parent().is_dir())
-
-    def test_new_instance_is_neither_a_file_nor_a_dir(self):
-        x = m.Fake()
-        self.assertFalse(x.is_file())
-        self.assertFalse(x.is_dir())
 
     def test_readable_stream(self):
         x = m.Fake()
