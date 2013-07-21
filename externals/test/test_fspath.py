@@ -7,13 +7,9 @@ from externals.test import mixins
 import contextlib
 
 
-class TestFsPath(unittest.TestCase):
-
+class TestRoot(unittest.TestCase):
     def _get_root(self):
         return m.FsPath('/')
-
-    def _get_existing_file(self):
-        return m.FsPath(__file__)
 
     def test_parent_of_root_exception(self):
         with self.assertRaises(m.NoParentError):
@@ -22,6 +18,18 @@ class TestFsPath(unittest.TestCase):
     def test_child_of_root_has_a_parent(self):
         child = self._get_root() / 'stem'
         child.parent()
+
+    def test_root_is_not_a_file(self):
+        self.assertFalse(self._get_root().is_file())
+
+    def test_root_is_a_directory(self):
+        self.assertTrue(self._get_root().is_dir())
+
+
+class TestFsPath(unittest.TestCase):
+
+    def _get_existing_file(self):
+        return m.FsPath(__file__)
 
     def test_this_file_exists(self):
         self.assertTrue(self._get_existing_file().exists())
@@ -35,12 +43,6 @@ class TestFsPath(unittest.TestCase):
 
     def test_this_file_is_not_a_directory(self):
         self.assertFalse(self._get_existing_file().is_dir())
-
-    def test_root_is_not_a_file(self):
-        self.assertFalse(self._get_root().is_file())
-
-    def test_root_is_a_directory(self):
-        self.assertTrue(self._get_root().is_dir())
 
     def test_name_is_last_segment_of_path(self):
         x = m.FsPath('/a/last')
