@@ -56,15 +56,16 @@ class Test_FS(unittest.TestCase):
 
 class Test_Fake(unittest.TestCase):
 
+    def _get_root(self):
+        return m.Fake()
+
     def test_child_of_root_has_a_parent(self):
-        x = m.Fake()
-        child = x / 'a'
+        child = self._get_root() / 'a'
         child.parent()
 
     def test_root_has_no_parent(self):
-        x = m.Fake()
         with self.assertRaises(m.NoParentError):
-            x.parent()
+            self._get_root().parent()
 
     def test_name(self):
         self.assertEqual('a name', (m.Fake() / 'a name').name)
@@ -74,7 +75,7 @@ class Test_Fake(unittest.TestCase):
         self.assertFalse(x.exists())
 
     def test_root_exists(self):
-        self.assertTrue(m.Fake().exists())
+        self.assertTrue(self._get_root().exists())
 
     def test_existing_child_exists(self):
         x = m.Fake() / 'b'
