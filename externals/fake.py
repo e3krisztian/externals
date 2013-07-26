@@ -15,7 +15,7 @@ KEY_CONTENT = 'content'  # file behavior
 class FS(object):
 
     def __init__(self):
-        self.root = {'children': {}}
+        self.root = {KEY_CHILDREN: {}}
 
     def __getitem__(self, path):
         node = self.root
