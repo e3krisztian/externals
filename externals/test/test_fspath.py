@@ -3,7 +3,7 @@ import unittest
 import os
 from temp_dir import in_temp_dir, within_temp_dir
 import externals.fspath as m
-from externals.test import mixins, common
+from externals.test import common
 import contextlib
 
 
@@ -184,7 +184,7 @@ class Test_working_directory(unittest.TestCase):
 
 class Test_FsPath_copy_to(
         unittest.TestCase,
-        mixins.External_copy_to__multiread_mixin):
+        common.External_copy_to__multiread_mixin):
 
     @contextlib.contextmanager
     def external(self):

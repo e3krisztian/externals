@@ -1,7 +1,7 @@
 # coding: utf8
 import unittest
 import externals.fake as m
-from externals.test import mixins, common
+from externals.test import common
 import contextlib
 
 
@@ -183,7 +183,7 @@ class Test_Fake(unittest.TestCase):
         self.assertEqual(content, (root / 'a//b/').content)
 
 
-class Test_copy_to(unittest.TestCase, mixins.External_copy_to__mixin):
+class Test_copy_to(unittest.TestCase, common.External_copy_to__mixin):
 
     @contextlib.contextmanager
     def external(self):
