@@ -137,6 +137,12 @@ class Test_Fake(unittest.TestCase):
             root.content
         self.assertFalse(ab.exists())
 
+    def test_remove_root_makes_root_a_non_directory(self):
+        root = m.Fake()
+        root.remove()
+
+        self.assertFalse(root.is_dir())
+
     def test_remove_a_non_root(self):
         root = m.Fake()
         root.content = 'root'
