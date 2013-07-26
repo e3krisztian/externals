@@ -183,10 +183,10 @@ class Test_Fake(unittest.TestCase):
         self.assertEqual(content, (root / 'a//b/').content)
 
 
-class Test_copy_to(unittest.TestCase, common.External_copy_to__mixin):
+class Test_copy_to(unittest.TestCase, common.External_copy_to_Tests):
 
     @contextlib.contextmanager
-    def external(self):
+    def _get_external(self):
         x = m.Fake()
         x.content = 'small content'
         yield x

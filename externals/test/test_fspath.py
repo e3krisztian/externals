@@ -184,10 +184,10 @@ class Test_working_directory(unittest.TestCase):
 
 class Test_FsPath_copy_to(
         unittest.TestCase,
-        common.External_copy_to__multiread_mixin):
+        common.BigExternal_copy_to_Tests):
 
     @contextlib.contextmanager
-    def external(self):
+    def _get_external(self):
         with in_temp_dir():
             x = m.working_directory() / 'temporary file'
             x.content = 'something smallish'

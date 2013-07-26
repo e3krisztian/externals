@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+'''
+Mixin classes for testing common `External` behavior.
+'''
+
 from abc import ABCMeta, abstractmethod
 import mock
 from externals import external
@@ -31,12 +35,12 @@ class RootTests(object):
         self.assertTrue(self._get_root().exists())
 
 
-class External_copy_to__mixin(object):
+class External_copy_to_Tests(object):
 
     __metaclass__ = ABCMeta
 
     @abstractmethod
-    def external(self):  # pragma: no cover
+    def _get_external(self):  # pragma: no cover
         '''\
         I should return a `context manager`, whose value is the temporary
           external
@@ -47,7 +51,7 @@ class External_copy_to__mixin(object):
 
     def test_to_fake(self):
         mem = Fake()
-        with self.external() as external:
+        with self._get_external() as external:
             content = external.content
             external.copy_to(mem)
 
@@ -57,17 +61,17 @@ class External_copy_to__mixin(object):
         mem = Fake()
         mem.content = 'small something'
 
-        with self.external() as external:
+        with self._get_external() as external:
             mem.copy_to(external)
 
             self.assertEqual('small something', external.content)
 
 
-class External_copy_to__multiread_mixin(External_copy_to__mixin):
+class BigExternal_copy_to_Tests(External_copy_to_Tests):
 
     def test_incomplete_reads_are_concatenated(self):
         mem = Fake()
-        with self.external() as external:
+        with self._get_external() as external:
             def create_fragmenting_reader():
                 class Reader(object):
 
