@@ -81,6 +81,17 @@ class TestFsPath(unittest.TestCase):
             self.assertEqual('something4', x_read.content)
 
     @within_temp_dir
+    def test_writable_stream_creates_missing_directories(self):
+            x_store = m.working_directory() / 'missing directory' / 'test-file'
+
+            # create empty file
+            with x_store.writable_stream():
+                pass
+
+            x_read = m.working_directory() / 'missing directory' / 'test-file'
+            self.assertEqual('', x_read.content)
+
+    @within_temp_dir
     def test_children_returns_list_of_externals_for_children(self):
             x_tempdir = m.working_directory()
             (x_tempdir / 'a').content = 'a content'
