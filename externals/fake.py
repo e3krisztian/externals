@@ -1,5 +1,5 @@
 from externals.external import External, NoParentError
-from StringIO import StringIO
+import io
 import contextlib
 
 
@@ -97,7 +97,10 @@ class Fake(External):
         **content())
 
     def readable_stream(self):
-        return contextlib.closing(StringIO(self.content))
+        stream = io.BytesIO()
+        stream.write(self.content)
+        stream.seek(0)
+        return contextlib.closing(stream)
 
     def writable_stream(self):
         return contextlib.closing(WritableStream(self))
@@ -122,13 +125,13 @@ class Fake(External):
             pass
 
 
-class WritableStream(StringIO):
+class WritableStream(io.BytesIO):
 
     def __init__(self, external):
-        StringIO.__init__(self)
+        io.BytesIO.__init__(self)
         self.__external = external
 
     def close(self):
         content = self.getvalue()
-        StringIO.close(self)
+        io.BytesIO.close(self)
         self.__external.content = content

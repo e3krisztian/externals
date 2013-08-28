@@ -59,12 +59,12 @@ class External_copy_to_Tests(object):
 
     def test_from_fake(self):
         mem = Fake()
-        mem.content = 'small something'
+        mem.content = b'small something'
 
         with self._get_external() as external:
             mem.copy_to(external)
 
-            self.assertEqual('small something', external.content)
+            self.assertEqual(b'small something', external.content)
 
 
 class BigExternal_copy_to_Tests(External_copy_to_Tests):
@@ -92,10 +92,10 @@ class BigExternal_copy_to_Tests(External_copy_to_Tests):
                     def __exit__(self, *args, **kwargs):
                         pass
 
-                return Reader(['a', 'b', 'c'])
+                return Reader([b'a', b'b', b'c'])
 
             with mock.patch.object(
                     external, 'readable_stream', create_fragmenting_reader):
                 external.copy_to(mem)
 
-        self.assertEqual('abc', mem.content)
+        self.assertEqual(b'abc', mem.content)

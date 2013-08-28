@@ -79,14 +79,14 @@ class FsPath(External):
         max_block_size = self.MAX_BLOCK_SIZE
         with self.readable_stream() as source:
             with other.writable_stream() as destination:
-                try:
-                    while True:
+                while True:
+                    try:
                         block = source.read(max_block_size)
-                        if block == '':
-                            break
-                        destination.write(block)
-                except EOFError:
-                    pass
+                    except EOFError:
+                        break
+                    if not block:
+                        break
+                    destination.write(block)
 
 
 def working_directory():

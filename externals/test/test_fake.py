@@ -101,17 +101,17 @@ class Test_Fake(unittest.TestCase):
 
     def test_readable_stream(self):
         x = m.Fake()
-        x.content = 'I am root'
+        x.content = b'I am root'
         with x.readable_stream() as f:
-            self.assertEqual('I am root', f.read())
+            self.assertEqual(b'I am root', f.read())
 
     def test_writable_stream(self):
         x = m.Fake() / 'file123'
         with x.writable_stream() as f:
-            f.write('FILE')
-            f.write('1')
-            f.write('23')
-        self.assertEqual('FILE123', x.content)
+            f.write(b'FILE')
+            f.write(b'1')
+            f.write(b'23')
+        self.assertEqual(b'FILE123', x.content)
 
     def test_children(self):
         x = m.Fake()
