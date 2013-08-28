@@ -8,14 +8,15 @@ from setuptools import setup
 
 setup(
     name='externals',
-    version='0.2dev',
+    version=':versiontools:externals:',
     description=(
         'A light abstraction of hierarchically named resources,'
         ' potentially external to the current process'),
     author='Krisztián Fekete',
     author_email='fekete.krisztyan@gmail.com',
     url='http://maybe.later',
-    packages=['externals'],
+    packages=['externals', 'externals.test'],
+    setup_requires=['versiontools >= 1.8'],
     install_requires=[],
     tests_require=[
         'temp_dir >=0.1',
