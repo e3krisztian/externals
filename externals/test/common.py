@@ -44,10 +44,8 @@ class External_copy_to_Tests(object):
         '''\
         I should return a `context manager`, whose value is the temporary
           external
-        I will clean up the temporary external when leaving the context
-          it is used in.
+        The context manager will clean up the temporary external.
         '''
-        pass
 
     def test_to_memory(self):
         mem = Memory()
