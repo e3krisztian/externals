@@ -119,7 +119,7 @@ class Fake(External):
             self / name
             for name in subdir)
 
-    def remove(self):
+    def delete(self):
         try:
             self._node.clear()
         except KeyError:

@@ -125,32 +125,32 @@ class Test_Fake(unittest.TestCase):
         self.assertEqual('a', a.name)
         self.assertEqual('content of x', x.content)
 
-    def test_remove_root_removes_all_contents(self):
+    def test_delete_root_removes_all_contents(self):
         root = m.Fake()
         root.content = 'root'
         ab = root / 'a' / 'b'
         ab.content = 'content of a/b'
 
-        root.remove()
+        root.delete()
 
         with self.assertRaises(KeyError):
             root.content
         self.assertFalse(ab.exists())
 
-    def test_remove_root_makes_root_a_non_directory(self):
+    def test_delete_root_makes_root_a_non_directory(self):
         root = m.Fake()
-        root.remove()
+        root.delete()
 
         self.assertFalse(root.is_dir())
 
-    def test_remove_a_non_root(self):
+    def test_delete_a_non_root(self):
         root = m.Fake()
         root.content = 'root'
         x = root / '1'
         ab = x / 'a' / 'b'
         ab.content = 'content of a/b'
 
-        x.remove()
+        x.delete()
 
         self.assertFalse(ab.exists())
         self.assertTrue('root', root.content)
@@ -160,10 +160,10 @@ class Test_Fake(unittest.TestCase):
     def test_nonexistent_path_is_not_a_directory(self):
         self.assertFalse((m.Fake() / 'a').is_dir())
 
-    def test_remove_nonexistent_path(self):
+    def test_delete_nonexistent_path(self):
         root = m.Fake()
         (root / 'x').content = 'expect to remain'
-        (root / 'a').remove()
+        (root / 'a').delete()
 
         self.assertEqual('expect to remain', (root / 'x').content)
 

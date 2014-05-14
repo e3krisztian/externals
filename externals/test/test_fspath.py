@@ -144,7 +144,7 @@ class TestFsPath(unittest.TestCase):
                 self.assertEqual(b'content', f.read())
 
     @within_temp_dir
-    def test_directory_with_subdir_is_removed(self):
+    def test_directory_with_subdir_is_deleted(self):
             x_tempdir = m.working_directory()
             x_a = x_tempdir / 'a'
             x_ab = x_a / 'b'
@@ -152,7 +152,7 @@ class TestFsPath(unittest.TestCase):
 
             x_file.content = b'content'
 
-            x_a.remove()
+            x_a.delete()
 
             self.assertFalse(x_ab.exists())
 

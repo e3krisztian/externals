@@ -70,7 +70,7 @@ class FsPath(External):
         for name in os.listdir(self.path):
             yield self / name
 
-    def remove(self):
+    def delete(self):
         shutil.rmtree(self.path)
 
     MAX_BLOCK_SIZE = 1 * 1024 ** 2

@@ -83,7 +83,7 @@ class External(Hierarchy):
         pass
 
     @abstractmethod
-    def remove(self):  # pragma: no cover
+    def delete(self):  # pragma: no cover
         pass
 
     def copy_to(self, other):
