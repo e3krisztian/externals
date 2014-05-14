@@ -2,26 +2,27 @@
 import unittest
 import os
 from temp_dir import in_temp_dir, within_temp_dir
-import externals.fspath as m
+import externals.filesystem as m
 from externals.test import common
 import contextlib
 
 
 class TestFsRoot(unittest.TestCase, common.RootTests):
+
     def _get_root(self):
-        return m.FsPath('/')
+        return m.File('/')
 
 
-class TestFsPath(unittest.TestCase):
+class TestFile(unittest.TestCase):
 
     def _get_existing_file(self):
-        return m.FsPath(__file__)
+        return m.File(__file__)
 
     def test_this_file_exists(self):
         self.assertTrue(self._get_existing_file().exists())
 
     def test_nonexistent_child_does_not_exists(self):
-        x = m.FsPath(__file__) / 'nonexistent'
+        x = m.File(__file__) / 'nonexistent'
         self.assertFalse(x.exists())
 
     def test_this_file_is_a_file(self):
@@ -31,7 +32,7 @@ class TestFsPath(unittest.TestCase):
         self.assertFalse(self._get_existing_file().is_dir())
 
     def test_name_is_last_segment_of_path(self):
-        x = m.FsPath('/a/last')
+        x = m.File('/a/last')
         self.assertEqual('last', x.name)
 
     @within_temp_dir
@@ -40,7 +41,7 @@ class TestFsPath(unittest.TestCase):
             with open(filename, 'wb') as f:
                 f.write(b'something\nand more')
 
-            x = m.FsPath(filename)
+            x = m.File(filename)
 
             self.assertEqual(b'something\nand more', x.content)
 
@@ -48,20 +49,20 @@ class TestFsPath(unittest.TestCase):
     def test_set_content_stores_data(self):
             filename = 'test-file2'
 
-            x_store = m.FsPath(filename)
+            x_store = m.File(filename)
             x_store.content = b'something2\nand more'
 
-            x_read = m.FsPath(filename)
+            x_read = m.File(filename)
             self.assertEqual(b'something2\nand more', x_read.content)
 
     @within_temp_dir
     def test_readable_stream_returns_an_open_file(self):
             filename = 'test-file3'
 
-            x_store = m.FsPath(filename)
+            x_store = m.File(filename)
             x_store.content = b'something3'
 
-            x_read = m.FsPath(filename)
+            x_read = m.File(filename)
             with x_read.readable_stream() as stream:
                 self.assertEqual(b's', stream.read(1))
                 self.assertEqual(b'o', stream.read(1))
@@ -144,7 +145,7 @@ class TestFsPath(unittest.TestCase):
                 self.assertEqual(b'content', f.read())
 
     @within_temp_dir
-    def test_directory_with_subdir_is_removed(self):
+    def test_directory_with_subdir_is_deleted(self):
             x_tempdir = m.working_directory()
             x_a = x_tempdir / 'a'
             x_ab = x_a / 'b'
@@ -152,7 +153,7 @@ class TestFsPath(unittest.TestCase):
 
             x_file.content = b'content'
 
-            x_a.remove()
+            x_a.delete()
 
             self.assertFalse(x_ab.exists())
 
@@ -187,7 +188,7 @@ class TestFsPath(unittest.TestCase):
 class Test_working_directory(unittest.TestCase):
 
     def test_working_directory_is_an_fspath(self):
-        self.assertIsInstance(m.working_directory(), m.FsPath)
+        self.assertIsInstance(m.working_directory(), m.File)
 
     def test_working_directory_is_absolute(self):
         with in_temp_dir():
@@ -197,7 +198,7 @@ class Test_working_directory(unittest.TestCase):
                 self.assertNotEqual(x1.path, x2.path)
 
 
-class Test_FsPath_copy_to(
+class Test_File_copy_to(
         unittest.TestCase,
         common.BigExternal_copy_to_Tests):
 

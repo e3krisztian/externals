@@ -4,7 +4,7 @@ import os
 import shutil
 
 
-class FsPath(External):
+class File(External):
 
     def __init__(self, path):
         self.path = os.path.realpath(path)
@@ -18,7 +18,7 @@ class FsPath(External):
         new_path, tail = os.path.split(self.path)
         if not tail:
             raise NoParentError
-        return FsPath(new_path)
+        return File(new_path)
 
     def __div__(self, sub_path):
         '''Build new externals for contained sub_path
@@ -27,7 +27,7 @@ class FsPath(External):
         x / 'name1/name2/name3'
         '''
         # FIXME: take care of (forbid?) /./ and /../ constructs
-        return FsPath(
+        return File(
             os.path.join(
                 self.path,
                 sub_path.strip(os.path.sep)))
@@ -70,7 +70,7 @@ class FsPath(External):
         for name in os.listdir(self.path):
             yield self / name
 
-    def remove(self):
+    def delete(self):
         shutil.rmtree(self.path)
 
     MAX_BLOCK_SIZE = 1 * 1024 ** 2
@@ -90,4 +90,4 @@ class FsPath(External):
 
 
 def working_directory():
-    return FsPath('.')
+    return File('.')

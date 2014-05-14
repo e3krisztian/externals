@@ -1,13 +1,18 @@
 # coding: utf8
 import unittest
-import externals.external as m
+from externals.external import Hierarchy as BaseHierarchy
+import externals.locate as m
 
 
-class Hierarchy(m.Hierarchy):
+class Hierarchy(BaseHierarchy):
 
     def __init__(self, path):
         self.path = path
         self._is_root = path == '/'
+
+    @property
+    def name(self):  # pragma: no cover
+        raise NotImplementedError
 
     def exists(self):
         return self.path in '/ /a /a/b /a/b/x /a/y /x /.git'.split()
@@ -24,6 +29,9 @@ class Hierarchy(m.Hierarchy):
             raise m.NoParentError
         head, sep, tail = self.path.rpartition('/')
         return self.__class__(head or '/')
+
+    def __iter__(self):  # pragma: no cover
+        raise NotImplementedError
 
 
 class Test_TestHierarchy(unittest.TestCase):
