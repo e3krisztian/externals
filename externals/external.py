@@ -19,6 +19,11 @@ class Hierarchy(object):
 
     __metaclass__ = ABCMeta
 
+    @abstractproperty
+    def name(self):  # pragma: no cover
+        '''Last name '''
+        pass
+
     @abstractmethod
     def parent(self):  # pragma: no cover
         pass
@@ -40,8 +45,12 @@ class Hierarchy(object):
         '''
         return self.__div__(sub_path)
 
+    def children(self):
+        return list(self)
+
     @abstractmethod
-    def exists(self):  # pragma: no cover
+    def __iter__(self):  # pragma: no cover
+        ''' Iterator over children '''
         pass
 
 
@@ -50,16 +59,11 @@ class External(Hierarchy):
     __metaclass__ = ABCMeta
 
     @abstractproperty
-    def name(self):  # pragma: no cover
-        '''Last name '''
+    def content(self):  # pragma: no cover
         pass
 
     @abstractmethod
-    def is_file(self):  # pragma: no cover
-        pass
-
-    @abstractproperty
-    def content(self):  # pragma: no cover
+    def exists(self):  # pragma: no cover
         pass
 
     @abstractmethod
@@ -71,15 +75,11 @@ class External(Hierarchy):
         pass
 
     @abstractmethod
-    def is_dir(self):  # pragma: no cover
+    def is_file(self):  # pragma: no cover
         pass
 
-    def children(self):
-        return list(self)
-
     @abstractmethod
-    def __iter__(self):  # pragma: no cover
-        ''' Iterator over children '''
+    def is_dir(self):  # pragma: no cover
         pass
 
     @abstractmethod

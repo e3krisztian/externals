@@ -10,6 +10,10 @@ class Hierarchy(BaseHierarchy):
         self.path = path
         self._is_root = path == '/'
 
+    @property
+    def name(self):  # pragma: no cover
+        raise NotImplementedError
+
     def exists(self):
         return self.path in '/ /a /a/b /a/b/x /a/y /x /.git'.split()
 
@@ -25,6 +29,9 @@ class Hierarchy(BaseHierarchy):
             raise m.NoParentError
         head, sep, tail = self.path.rpartition('/')
         return self.__class__(head or '/')
+
+    def __iter__(self):  # pragma: no cover
+        raise NotImplementedError
 
 
 class Test_TestHierarchy(unittest.TestCase):
