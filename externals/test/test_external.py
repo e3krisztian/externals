@@ -1,9 +1,10 @@
 # coding: utf8
 import unittest
-import externals.external as m
+from externals.external import Hierarchy as BaseHierarchy
+import externals.locate as m
 
 
-class Hierarchy(m.Hierarchy):
+class Hierarchy(BaseHierarchy):
 
     def __init__(self, path):
         self.path = path
