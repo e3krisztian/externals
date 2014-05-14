@@ -4,9 +4,9 @@ from .external import External
 External
 from .memory import Memory
 Memory
-from .fspath import File
+from .filesystem import File
 File
-from .fspath import working_directory
+from .filesystem import working_directory
 working_directory
 
 __all__ = tuple(

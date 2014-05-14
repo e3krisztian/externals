@@ -2,12 +2,13 @@
 import unittest
 import os
 from temp_dir import in_temp_dir, within_temp_dir
-import externals.fspath as m
+import externals.filesystem as m
 from externals.test import common
 import contextlib
 
 
 class TestFsRoot(unittest.TestCase, common.RootTests):
+
     def _get_root(self):
         return m.File('/')
 
