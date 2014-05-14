@@ -38,7 +38,7 @@ class InMemoryFileSystem(object):
             node = subdirs[name]
 
 
-class Fake(External):
+class Memory(External):
 
     '''I am not an external, but pretend to be: hold data in memory.'''
 

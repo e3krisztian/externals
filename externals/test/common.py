@@ -6,7 +6,7 @@ Mixin classes for testing common `External` behavior.
 from abc import ABCMeta, abstractmethod
 import mock
 from externals import external
-from externals.fake import Fake
+from externals.fake import Memory
 
 
 class RootTests(object):
@@ -50,7 +50,7 @@ class External_copy_to_Tests(object):
         pass
 
     def test_to_fake(self):
-        mem = Fake()
+        mem = Memory()
         with self._get_external() as external:
             content = external.content
             external.copy_to(mem)
@@ -58,7 +58,7 @@ class External_copy_to_Tests(object):
         self.assertEqual(content, mem.content)
 
     def test_from_fake(self):
-        mem = Fake()
+        mem = Memory()
         mem.content = b'small something'
 
         with self._get_external() as external:
@@ -70,7 +70,7 @@ class External_copy_to_Tests(object):
 class BigExternal_copy_to_Tests(External_copy_to_Tests):
 
     def test_incomplete_reads_are_concatenated(self):
-        mem = Fake()
+        mem = Memory()
         with self._get_external() as external:
             def create_fragmenting_reader():
                 class Reader(object):
