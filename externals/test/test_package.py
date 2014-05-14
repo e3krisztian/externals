@@ -15,6 +15,10 @@ class Test_imports(unittest.TestCase):
         from externals import working_directory
         working_directory
 
-    def test_External(self):
-        from externals import External
-        External
+    def test_HierarchicalExternal(self):
+        from externals import HierarchicalExternal
+        HierarchicalExternal
+
+    def test_NoParentError(self):
+        from externals import NoParentError
+        NoParentError

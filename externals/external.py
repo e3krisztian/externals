@@ -54,7 +54,7 @@ class Hierarchy(object):
         pass
 
 
-class External(Hierarchy):
+class External(object):
 
     __metaclass__ = ABCMeta
 
@@ -88,3 +88,8 @@ class External(Hierarchy):
 
     def copy_to(self, other):
         other.content = self.content
+
+
+class HierarchicalExternal(Hierarchy, External):
+
+    __metaclass__ = ABCMeta

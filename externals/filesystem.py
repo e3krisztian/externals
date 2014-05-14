@@ -1,10 +1,10 @@
-from externals.external import External
-from externals.external import NoParentError
+from . import HierarchicalExternal
+from . import NoParentError
 import os
 import shutil
 
 
-class File(External):
+class File(HierarchicalExternal):
 
     def __init__(self, path):
         self.path = os.path.realpath(path)

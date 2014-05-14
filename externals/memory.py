@@ -1,4 +1,5 @@
-from externals.external import External, NoParentError
+from . import HierarchicalExternal
+from . import NoParentError
 import io
 import contextlib
 
@@ -38,7 +39,7 @@ class InMemoryFileSystem(object):
             node = subdirs[name]
 
 
-class Memory(External):
+class Memory(HierarchicalExternal):
 
     '''I am not an external, but pretend to be: hold data in memory.'''
 

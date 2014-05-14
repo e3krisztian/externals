@@ -5,8 +5,8 @@ Mixin classes for testing common `External` behavior.
 
 from abc import ABCMeta, abstractmethod
 import mock
-from externals import external
-from externals.memory import Memory
+from externals import Memory
+from externals import NoParentError
 
 
 class RootTests(object):
@@ -18,7 +18,7 @@ class RootTests(object):
         pass
 
     def test_parent_of_root_exception(self):
-        with self.assertRaises(external.NoParentError):
+        with self.assertRaises(NoParentError):
             self._get_root().parent()
 
     def test_child_of_root_has_a_parent(self):

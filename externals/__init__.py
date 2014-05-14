@@ -1,7 +1,9 @@
 __version__ = (0, 2, 0, 'dev', 0)
 
-from .external import External
-External
+from .external import HierarchicalExternal
+HierarchicalExternal
+from .external import NoParentError
+NoParentError
 from .memory import Memory
 Memory
 from .filesystem import File
