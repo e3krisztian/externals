@@ -5,14 +5,15 @@ import contextlib
 
 PATH_SEPARATOR = '/'
 
-# FS nodes are dictionaries, with known keys (all of them are optional):
+# InMemoryFileSystem nodes are dictionaries,
+# with known keys (all of them are optional):
 # additional metadata can be supported by adding new keys
 
 KEY_CHILDREN = 'children'  # directory behavior
 KEY_CONTENT = 'content'  # file behavior
 
 
-class FS(object):
+class InMemoryFileSystem(object):
 
     def __init__(self):
         self.root = {KEY_CHILDREN: {}}
@@ -42,7 +43,7 @@ class Fake(External):
     '''I am not an external, but pretend to be: hold data in memory.'''
 
     def __init__(self, fs=None, path=None):
-        self._fs = fs or FS()
+        self._fs = fs or InMemoryFileSystem()
         self._path = tuple(part for part in path if part) if path else ()
 
     @property

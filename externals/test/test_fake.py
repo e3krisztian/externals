@@ -8,18 +8,18 @@ import contextlib
 ROOT_PATH = ()
 
 
-class Test_FS(unittest.TestCase):
+class Test_InMemoryFileSystem(unittest.TestCase):
 
     def test_access_root(self):
-        fs = m.FS()
+        fs = m.InMemoryFileSystem()
         self.assertEqual(fs.root, fs[ROOT_PATH])
 
     def test_access_non_existing(self):
         with self.assertRaises(KeyError):
-            m.FS()[('nonexistent child')]
+            m.InMemoryFileSystem()[('nonexistent child')]
 
     def test_access_non_existing2(self):
-        fs = m.FS()
+        fs = m.InMemoryFileSystem()
         fs.ensure(['a'])
         with self.assertRaises(KeyError):
             fs[('nonexistent child')]
@@ -30,19 +30,19 @@ class Test_FS(unittest.TestCase):
         self.assertIn(name, parent_path[m.KEY_CHILDREN])
 
     def test_create_child_of_root(self):
-        fs = m.FS()
+        fs = m.InMemoryFileSystem()
         path = ['a']
         fs.ensure(path)
         self.assertPathExists(fs, path)
 
     def test_set_far_from_root(self):
-        fs = m.FS()
+        fs = m.InMemoryFileSystem()
         path = ['a', 'b', 'c']
         fs.ensure(path)
         self.assertPathExists(fs, path)
 
     def test_two_children(self):
-        fs = m.FS()
+        fs = m.InMemoryFileSystem()
 
         path1 = ['a', 'b', 'c1']
         fs.ensure(path1)
