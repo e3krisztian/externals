@@ -6,7 +6,7 @@ Mixin classes for testing common `External` behavior.
 from abc import ABCMeta, abstractmethod
 import mock
 from externals import external
-from externals.fake import Memory
+from externals.memory import Memory
 
 
 class RootTests(object):
@@ -49,7 +49,7 @@ class External_copy_to_Tests(object):
         '''
         pass
 
-    def test_to_fake(self):
+    def test_to_memory(self):
         mem = Memory()
         with self._get_external() as external:
             content = external.content
@@ -57,7 +57,7 @@ class External_copy_to_Tests(object):
 
         self.assertEqual(content, mem.content)
 
-    def test_from_fake(self):
+    def test_from_memory(self):
         mem = Memory()
         mem.content = b'small something'
 

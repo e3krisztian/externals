@@ -1,6 +1,6 @@
 # coding: utf8
 import unittest
-import externals.fake as m
+import externals.memory as m
 from externals.test import common
 import contextlib
 
