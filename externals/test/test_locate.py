@@ -1,34 +1,13 @@
 # coding: utf8
 import unittest
-from externals.external import Hierarchy
+from externals.external import Path
 import externals.locate as m
 
 
-class ConcreteHierarchy(Hierarchy):
-
-    def __init__(self, path):
-        self.path = path
-        self._is_root = path == '/'
-
-    @property
-    def name(self):  # pragma: no cover
-        raise NotImplementedError
+class ConcretePath(Path):
 
     def exists(self):
         return self.path in '/ /a /a/b /a/b/x /a/y /x /.git'.split()
-
-    def __div__(self, name):
-        if self._is_root:
-            newpath = '/' + name
-        else:
-            newpath = '{}/{}'.format(self.path, name)
-        return self.__class__(newpath)
-
-    def parent(self):
-        if self._is_root:
-            raise m.NoParentError
-        head, sep, tail = self.path.rpartition('/')
-        return self.__class__(head or '/')
 
     def __iter__(self):  # pragma: no cover
         raise NotImplementedError
@@ -38,13 +17,13 @@ class Test_TestHierarchy(unittest.TestCase):
 
     def test_parent_of_root_raises_error(self):
         with self.assertRaises(m.NoParentError):
-            ConcreteHierarchy('/').parent()
+            ConcretePath('/').parent()
 
     def test_parent_of_a_is_root(self):
-        self.assertEqual('/', ConcreteHierarchy('/a').parent().path)
+        self.assertEqual('/', ConcretePath('/a').parent().path)
 
     def test_child_of_root(self):
-        self.assertEqual('/a', (ConcreteHierarchy('/') / 'a').path)
+        self.assertEqual('/a', (ConcretePath('/') / 'a').path)
 
 
 '''
@@ -71,7 +50,7 @@ class Test_locate(unittest.TestCase):
     def check(self, expected, orig, name):
         self.assertEqual(
             expected,
-            m.locate(ConcreteHierarchy(orig), name).path
+            m.locate(ConcretePath(orig), name).path
         )
 
     def test_locate_ab_b_is_ab(self):
@@ -91,4 +70,4 @@ class Test_locate(unittest.TestCase):
 
     def test_locate_ab_z_raises_NotFoundError(self):
         with self.assertRaises(m.NotFoundError):
-            m.locate(ConcreteHierarchy('/a/b'), 'z')
+            m.locate(ConcretePath('/a/b'), 'z')

@@ -111,7 +111,7 @@ class TestFile(unittest.TestCase):
                 [name(child) for child in children])
 
     @within_temp_dir
-    def test_external_is_an_iterable_of_its_children(self):
+    def test_external_is_an_iterable_returning_children(self):
             x_tempdir = m.working_directory()
             (x_tempdir / 'a').content = b'a content'
             (x_tempdir / 'b').content = b'b content'

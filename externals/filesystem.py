@@ -1,42 +1,29 @@
 from . import HierarchicalExternal
-from . import NoParentError
 import os
 import shutil
 
 
 class File(HierarchicalExternal):
 
-    def __init__(self, path):
-        self.path = os.path.realpath(path)
+    PATH_SEPARATOR = os.path.sep
 
-    @property
-    def name(self):
-        parent, tail = os.path.split(self.path)
-        return tail
+    # Path implementation
+    def parse_path(self, path):
+        return super(File, self).parse_path(os.path.realpath(path))
 
-    def parent(self):
-        new_path, tail = os.path.split(self.path)
-        if not tail:
-            raise NoParentError
-        return File(new_path)
+    def __iter__(self):
+        for name in os.listdir(self.path):
+            yield self / name
 
-    def __div__(self, sub_path):
-        '''Build new externals for contained sub_path
-
-        x / 'name'
-        x / 'name1/name2/name3'
-        '''
-        # FIXME: take care of (forbid?) /./ and /../ constructs
-        return File(
-            os.path.join(
-                self.path,
-                sub_path.strip(os.path.sep)))
-
+    # External implementation
     def exists(self):
         return os.path.exists(self.path)
 
     def is_file(self):
         return os.path.isfile(self.path)
+
+    def is_dir(self):
+        return os.path.isdir(self.path)
 
     # .content
     def content():
@@ -62,13 +49,6 @@ class File(HierarchicalExternal):
             os.makedirs(parent)
 
         return open(self.path, 'wb')
-
-    def is_dir(self):
-        return os.path.isdir(self.path)
-
-    def __iter__(self):
-        for name in os.listdir(self.path):
-            yield self / name
 
     def delete(self):
         shutil.rmtree(self.path)

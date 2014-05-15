@@ -34,6 +34,11 @@ class RootTests(object):
     def test_root_exists(self):
         self.assertTrue(self._get_root().exists())
 
+    def test_root_name_is_a_root_path(self):
+        root = self._get_root()
+        clone = root.new(root.parse_path(root.name))
+        self.assertTrue(clone.is_root)
+
 
 class External_copy_to_Tests(object):
 

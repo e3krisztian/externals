@@ -15,27 +15,66 @@ class NoParentError(LookupError):
     pass
 
 
-class Hierarchy(object):
+class Path(object):
 
     __metaclass__ = ABCMeta
+    PATH_SEPARATOR = '/'
+    ROOT = PATH_SEPARATOR
 
-    @abstractproperty
-    def name(self):  # pragma: no cover
-        '''Last name '''
-        pass
+    def __init__(self, path=None, path_segments=()):
+        if path:
+            assert not path_segments
+            path_segments = self.parse_path(path)
+        self.path_segments = tuple(
+            segment
+            for segment in path_segments
+            if segment
+        )
 
-    @abstractmethod
-    def parent(self):  # pragma: no cover
-        pass
+    def new(self, path_segments):
+        '''
+        Create a new Path from path segments,
+        potentially passing around some shared view of the world.
+        '''
+        return self.__class__(path_segments=path_segments)
 
-    @abstractmethod
-    def __div__(self, sub_path):  # pragma: no cover
+    @property
+    def name(self):
+        if self.is_root:
+            return self.ROOT
+        return self.path_segments[-1]
+
+    @property
+    def is_root(self):
+        return not self.path_segments
+
+    @property
+    def path(self):
+        '''Path to me as a string'''
+        return self.ROOT + self.PATH_SEPARATOR.join(self.path_segments)
+
+    def parse_path(self, path):
+        '''Return path segments
+        '''
+        return path.split(self.PATH_SEPARATOR)
+
+    def parent(self):
+        if self.is_root:
+            raise NoParentError
+        return self.new(self.path_segments[:-1])
+
+    def __div__(self, sub_path):
         '''Build new externals for contained sub_path
 
         x / 'name'
         x / 'name1/name2/name3'
         '''
-        pass
+        # TODO: decide to allow . and .. or not - and handle them
+        path_segments = self.path_segments + tuple(
+            segment
+            for segment in sub_path.split(self.PATH_SEPARATOR)
+        )
+        return self.new(path_segments)
 
     def __truediv__(self, sub_path):  # pragma: no cover
         '''Build new externals for contained sub_path
@@ -58,12 +97,20 @@ class External(object):
 
     __metaclass__ = ABCMeta
 
-    @abstractproperty
-    def content(self):  # pragma: no cover
+    @abstractmethod
+    def exists(self):  # pragma: no cover
         pass
 
     @abstractmethod
-    def exists(self):  # pragma: no cover
+    def is_file(self):  # pragma: no cover
+        pass
+
+    @abstractmethod
+    def is_dir(self):  # pragma: no cover
+        pass
+
+    @abstractproperty
+    def content(self):  # pragma: no cover
         pass
 
     @abstractmethod
@@ -75,14 +122,6 @@ class External(object):
         pass
 
     @abstractmethod
-    def is_file(self):  # pragma: no cover
-        pass
-
-    @abstractmethod
-    def is_dir(self):  # pragma: no cover
-        pass
-
-    @abstractmethod
     def delete(self):  # pragma: no cover
         pass
 
@@ -90,6 +129,6 @@ class External(object):
         other.content = self.content
 
 
-class HierarchicalExternal(Hierarchy, External):
+class HierarchicalExternal(Path, External):
 
     __metaclass__ = ABCMeta
