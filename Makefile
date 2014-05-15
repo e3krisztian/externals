@@ -3,7 +3,7 @@
 all: test
 
 clean:
-	rm -rf .tox .coverage *.egg *.egg-info
+	rm -rf .tox .coverage *.egg *.egg-info build
 	find -name '*.pyc' -exec rm -f {} +
 	find -name '__pycache__' -exec rmdir -v {} +
 
