@@ -5,55 +5,6 @@ from externals.test import common
 import contextlib
 
 
-ROOT_PATH = ()
-
-
-class Test_InMemoryFileSystem(unittest.TestCase):
-
-    def test_access_root(self):
-        fs = m.InMemoryFileSystem()
-        self.assertEqual(fs.root, fs[ROOT_PATH])
-
-    def test_access_non_existing(self):
-        with self.assertRaises(KeyError):
-            m.InMemoryFileSystem()[('nonexistent child')]
-
-    def test_access_non_existing2(self):
-        fs = m.InMemoryFileSystem()
-        fs.ensure(['a'])
-        with self.assertRaises(KeyError):
-            fs[('nonexistent child')]
-
-    def assertPathExists(self, fs, path):
-        name = path[-1]
-        parent_path = fs[path[:-1]]
-        self.assertIn(name, parent_path[m.KEY_CHILDREN])
-
-    def test_create_child_of_root(self):
-        fs = m.InMemoryFileSystem()
-        path = ['a']
-        fs.ensure(path)
-        self.assertPathExists(fs, path)
-
-    def test_set_far_from_root(self):
-        fs = m.InMemoryFileSystem()
-        path = ['a', 'b', 'c']
-        fs.ensure(path)
-        self.assertPathExists(fs, path)
-
-    def test_two_children(self):
-        fs = m.InMemoryFileSystem()
-
-        path1 = ['a', 'b', 'c1']
-        fs.ensure(path1)
-        self.assertPathExists(fs, path1)
-
-        path2 = ['a', 'b', 'c2']
-        fs.ensure(path2)
-        self.assertPathExists(fs, path1)
-        self.assertPathExists(fs, path2)
-
-
 class TestMemoryRoot(unittest.TestCase, common.RootTests):
 
     def _get_root(self):
@@ -133,8 +84,8 @@ class Test_Memory(unittest.TestCase):
 
         root.delete()
 
-        with self.assertRaises(KeyError):
-            root.content
+        self.assertFalse(root.is_dir())
+        self.assertFalse(root.is_file())
         self.assertFalse(ab.exists())
 
     def test_delete_root_makes_root_a_non_directory(self):

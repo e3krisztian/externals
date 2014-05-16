@@ -1,39 +1,8 @@
-from . import HierarchicalExternal
 import io
 import contextlib
 
-
-# InMemoryFileSystem nodes are dictionaries,
-# with known keys (all of them are optional):
-# additional metadata can be supported by adding new keys
-
-KEY_CHILDREN = 'children'  # directory behavior
-KEY_CONTENT = 'content'  # file behavior
-
-
-class InMemoryFileSystem(object):
-
-    def __init__(self):
-        self.root = {KEY_CHILDREN: {}}
-
-    def __getitem__(self, path):
-        node = self.root
-        for name in path:
-            if KEY_CHILDREN not in node:
-                raise KeyError(path)
-            subdirs = node[KEY_CHILDREN]
-            node = subdirs[name]
-        return node
-
-    def ensure(self, path):
-        node = self.root
-        for name in path:
-            if KEY_CHILDREN not in node:
-                node[KEY_CHILDREN] = {}
-            subdirs = node[KEY_CHILDREN]
-            if name not in subdirs:
-                subdirs[name] = {}
-            node = subdirs[name]
+from . import HierarchicalExternal
+from .trie import Trie
 
 
 class Memory(HierarchicalExternal):
@@ -41,12 +10,8 @@ class Memory(HierarchicalExternal):
     '''I am not an external, but pretend to be: hold data in memory.'''
 
     def __init__(self, fs=None, path=None, path_segments=()):
-        self._fs = fs or InMemoryFileSystem()
+        self._fs = fs or Trie()
         super(Memory, self).__init__(path, path_segments)
-
-    @property
-    def _node(self):
-        return self._fs[self.path_segments]
 
     # Path implementation
     def new(self, path_segments):
@@ -54,38 +19,36 @@ class Memory(HierarchicalExternal):
 
     def __iter__(self):
         ''' Iterator over children '''
-        subdir = self._node[KEY_CHILDREN]
-        return ((self / name) for name in subdir)
+        children = self._fs.children(self.path_segments)
+        return ((self / name) for name in children)
 
     # External implementation
     def exists(self):
         try:
-            self._node
+            self._fs[self.path_segments]
             return True
         except KeyError:
             return False
 
     def is_file(self):
         try:
-            return KEY_CONTENT in self._node
+            return self._fs[self.path_segments] is not None
         except KeyError:
             return False
 
     def is_dir(self):
         try:
-            return KEY_CHILDREN in self._node
+            return self._fs.is_internal(self.path_segments)
         except KeyError:
             return False
 
     # .content
     def content():
         def fget(self):
-            return self._node[KEY_CONTENT]
+            return self._fs[self.path_segments]
 
         def fset(self, value):
-            # Create file with content and missing directories up to the file
-            self._fs.ensure(self.path_segments)
-            self._node[KEY_CONTENT] = value
+            self._fs[self.path_segments] = value
         return locals()
     content = property(
         doc='read/write property for accessing the content of "files"',
@@ -102,7 +65,7 @@ class Memory(HierarchicalExternal):
 
     def delete(self):
         try:
-            self._node.clear()
+            self._fs.delete(self.path_segments)
         except KeyError:
             pass
 

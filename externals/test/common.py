@@ -28,9 +28,6 @@ class RootTests(object):
     def test_root_is_not_a_file(self):
         self.assertFalse(self._get_root().is_file())
 
-    def test_root_is_a_directory(self):
-        self.assertTrue(self._get_root().is_dir())
-
     def test_root_exists(self):
         self.assertTrue(self._get_root().exists())
 
