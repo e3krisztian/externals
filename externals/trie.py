@@ -30,7 +30,8 @@ class Trie(object):
 
     def last(self, path):
         '''Content of last existing node on path'''
-        return self._get_node(path, last_existing=True).content
+        last, missing = self._get_last_and_missing(path)
+        return last.content
 
     def children(self, path):
         children = self._get_node(path).children
@@ -56,15 +57,23 @@ class Trie(object):
             self._root.content = None
 
     # helpers
-    def _get_node(self, path, last_existing=False):
+
+    def _get_last_and_missing(self, path):
         node = self._root
-        for name in path:
-            if node.children is None:
-                if last_existing:
-                    return node
-                raise KeyError(path)
+        for i, name in enumerate(path):
+            if (node.children is None) or (name not in node.children):
+                return node, path[i:]
+
             node = node.children[name]
-        return node
+
+        return node, []
+
+    def _get_node(self, path):
+        last, missing = self._get_last_and_missing(path)
+        if missing:
+            raise KeyError(path)
+
+        return last
 
     def _extend(self, path, contents, set_last):
         icontents = iter(contents)
@@ -79,3 +88,6 @@ class Trie(object):
             if name not in node.children:
                 node.children[name] = Node(content)
             node = node.children[name]
+
+        if set_last:
+            node.content = content

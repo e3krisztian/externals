@@ -42,6 +42,11 @@ class Test_Trie(unittest.TestCase):
         t['a'] = 'a'
         self.assertEquals('ab', t[('a', 'b')])
 
+    def test_set_existing_path_content(self):
+        t = trie_abcd()
+        t[('a', 'b')] = 'abab'
+        self.assertEquals('abab', t[('a', 'b')])
+
     def test_is_internal(self):
         self.assertTrue(trie_abcd().is_internal(['a']))
         self.assertFalse(trie_abcd().is_internal(['a', 'b']))
