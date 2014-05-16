@@ -1,10 +1,11 @@
 # coding: utf8
 import unittest
 import os
+import contextlib
 from temp_dir import in_temp_dir, within_temp_dir
+
 import externals.filesystem as m
 from externals.test import common
-import contextlib
 
 
 class TestFsRoot(unittest.TestCase, common.RootTests):

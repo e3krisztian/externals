@@ -5,6 +5,7 @@ Mixin classes for testing common `External` behavior.
 
 from abc import ABCMeta, abstractmethod
 import mock
+
 from externals import Memory
 from externals import NoParentError
 

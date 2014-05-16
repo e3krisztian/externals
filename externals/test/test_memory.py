@@ -1,8 +1,9 @@
 # coding: utf8
 import unittest
+import contextlib
+
 import externals.memory as m
 from externals.test import common
-import contextlib
 
 
 class TestMemoryRoot(unittest.TestCase, common.RootTests):

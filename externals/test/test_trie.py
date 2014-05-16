@@ -1,4 +1,5 @@
 import unittest
+
 import externals.trie as m
 
 
@@ -78,4 +79,3 @@ class Test_Trie(unittest.TestCase):
         t = trie_abcd()
         t.delete(['d'])
         self.assertEquals({'a'}, set(t.children(())))
-

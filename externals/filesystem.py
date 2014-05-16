@@ -1,6 +1,7 @@
-from . import HierarchicalExternal
 import os
 import shutil
+
+from . import HierarchicalExternal
 
 
 class File(HierarchicalExternal):
