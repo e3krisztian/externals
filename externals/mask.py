@@ -3,27 +3,32 @@ import itertools
 from .trie import Trie
 
 
-NOT_COVERED = 'NOT_COVERED'
-COVERED = 'COVERED'
-CHILDREN_COVERED = 'CHILDREN_COVERED'
+TRANSPARENT = 'TRANSPARENT'
+OPAQUE = 'OPAQUE'
+TRANSPARENT_BORDER = 'TRANSPARENT_BORDER'
+
+# path ending in a transparent border:
+# the item is transparent, but its potential children,
+# who are not mentioned explicitly in the mask
+# as being a transparent border themselves are opaque
 
 
 class Mask(Trie):
 
     def __init__(self):
         super(Mask, self).__init__()
-        self._root.content = NOT_COVERED
+        self._root.content = TRANSPARENT
 
     def drill(self, path):
         last, remaining = self._get_last_and_missing(path)
-        if last.content == NOT_COVERED:
+        if last.content == TRANSPARENT:
             # already not covered
             return
 
-        # force downgrade from COVERED
-        last.content = CHILDREN_COVERED
+        # make just the path transparent
+        last.content = TRANSPARENT_BORDER
         if remaining:
-            self.extend(path, itertools.repeat(CHILDREN_COVERED))
+            self.extend(path, itertools.repeat(TRANSPARENT_BORDER))
 
     def covered(self, path):
         last, remaining = self._get_last_and_missing(path)
@@ -31,8 +36,8 @@ class Mask(Trie):
 
     def _covered(self, last, remaining):
         if remaining:
-            return last.content != NOT_COVERED
-        return last.content == COVERED
+            return last.content != TRANSPARENT
+        return last.content == OPAQUE
 
     def cover(self, path):
         last, remaining = self._get_last_and_missing(path)
@@ -42,10 +47,10 @@ class Mask(Trie):
 
         # currently visible
         if remaining:
-            assert last.content == NOT_COVERED
-            self.extend(path, [NOT_COVERED] * (len(path) - 1) + [COVERED])
+            assert last.content == TRANSPARENT
+            self.extend(path, [TRANSPARENT] * (len(path) - 1) + [OPAQUE])
         else:
-            last.content = COVERED
+            last.content = OPAQUE
             last.children = None
 
         # assert self.covered(path)
