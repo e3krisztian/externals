@@ -51,6 +51,14 @@ class Test_Trie(unittest.TestCase):
         self.assertTrue(trie_abcd().is_internal(['a']))
         self.assertFalse(trie_abcd().is_internal(['a', 'b']))
         self.assertFalse(trie_abcd().is_internal(['d']))
+        self.assertFalse(trie_abcd().is_internal(['b']))
+
+    def test_has_content(self):
+        self.assertTrue(trie_abcd().has_content(['a', 'b']))
+        self.assertTrue(trie_abcd().has_content(['a', 'c']))
+        self.assertTrue(trie_abcd().has_content(['d']))
+        self.assertFalse(trie_abcd().has_content(['a']))
+        self.assertFalse(trie_abcd().has_content(['b']))
 
     def test_last_existing(self):
         self.assertEquals('ab', trie_abcd().last(['a', 'b']))
