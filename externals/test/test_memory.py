@@ -11,6 +11,9 @@ class TestMemoryRoot(unittest.TestCase, common.RootTests):
     def _get_root(self):
         return m.Memory()
 
+    def test_root_does_not_exists_initially(self):
+        self.assertFalse(m.Memory().exists())
+
 
 class Test_Memory(unittest.TestCase):
 

@@ -24,23 +24,13 @@ class Memory(HierarchicalExternal):
 
     # External implementation
     def exists(self):
-        try:
-            self._fs[self.path_segments]
-            return True
-        except KeyError:
-            return False
+        return self.is_dir() or self.is_file()
 
     def is_file(self):
-        try:
-            return self._fs[self.path_segments] is not None
-        except KeyError:
-            return False
+        return self._fs.has_content(self.path_segments)
 
     def is_dir(self):
-        try:
-            return self._fs.is_internal(self.path_segments)
-        except KeyError:
-            return False
+        return self._fs.is_internal(self.path_segments)
 
     # .content
     def content():
