@@ -6,6 +6,7 @@ from temp_dir import in_temp_dir, within_temp_dir
 
 import externals.filesystem as m
 from externals.test import common
+from externals import NoContentError
 
 
 class TestFsRoot(unittest.TestCase, common.RootTests):
@@ -45,6 +46,17 @@ class TestFile(unittest.TestCase):
         x = m.File(filename)
 
         self.assertEqual(b'something\nand more', x.content)
+
+    @within_temp_dir
+    def test_content_of_nonexistent_file_raises(self):
+        filename = 'test-file1'
+        x = m.File(filename)
+
+        with self.assertRaises(NoContentError):
+            x.content
+
+        with self.assertRaises(NoContentError):
+            x.readable_stream()
 
     @within_temp_dir
     def test_set_content_stores_data(self):

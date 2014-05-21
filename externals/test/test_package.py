@@ -22,3 +22,7 @@ class Test_imports(unittest.TestCase):
     def test_NoParentError(self):
         from externals import NoParentError
         NoParentError
+
+    def test_NoContentError(self):
+        from externals import NoContentError
+        NoContentError

@@ -1,7 +1,7 @@
 import io
 import contextlib
 
-from . import HierarchicalExternal
+from . import HierarchicalExternal, NoContentError
 from .trie import Trie
 
 
@@ -35,7 +35,10 @@ class Memory(HierarchicalExternal):
     # .content
     def content():
         def fget(self):
-            return self._fs[self.path_segments]
+            try:
+                return self._fs[self.path_segments]
+            except KeyError:
+                raise NoContentError(self.path)
 
         def fset(self, value):
             self._fs[self.path_segments] = value

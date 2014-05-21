@@ -15,6 +15,11 @@ class NoParentError(LookupError):
     pass
 
 
+class NoContentError(LookupError):
+    '''External does not have content (yet)'''
+    # raised for .content and .readable_stream
+
+
 class Path(object):
 
     __metaclass__ = ABCMeta

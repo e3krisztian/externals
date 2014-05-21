@@ -1,7 +1,7 @@
 import os
 import shutil
 
-from . import HierarchicalExternal
+from . import HierarchicalExternal, NoContentError
 
 
 class File(HierarchicalExternal):
@@ -42,7 +42,10 @@ class File(HierarchicalExternal):
         **content())
 
     def readable_stream(self):
-        return open(self.path, 'rb')
+        try:
+            return open(self.path, 'rb')
+        except IOError:
+            raise NoContentError(self.path)
 
     def writable_stream(self):
         parent, tail = os.path.split(self.path)
