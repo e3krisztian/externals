@@ -23,9 +23,6 @@ class Memory(HierarchicalExternal):
         return ((self / name) for name in children)
 
     # External implementation
-    def exists(self):
-        return self.is_dir() or self.is_file()
-
     def is_file(self):
         return self._fs.has_content(self.path_segments)
 

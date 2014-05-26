@@ -102,9 +102,8 @@ class External(object):
 
     __metaclass__ = ABCMeta
 
-    @abstractmethod
-    def exists(self):  # pragma: no cover
-        pass
+    def exists(self):
+        return self.is_dir() or self.is_file()
 
     @abstractmethod
     def is_file(self):  # pragma: no cover

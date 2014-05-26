@@ -28,10 +28,6 @@ class Overlay(HierarchicalExternal):
 
     # External
 
-    def exists(self):
-        # TODO
-        return True
-
     def is_file(self):
         # TODO
         return True
