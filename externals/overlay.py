@@ -29,23 +29,33 @@ class Overlay(HierarchicalExternal):
     # External
 
     def is_file(self):
-        # TODO
-        return True
+        try:
+            x = self._external_with_content
+            return x.is_file()
+        except NoContentError:
+            return False
 
     def is_dir(self):
-        # TODO
-        return True
+        try:
+            x = self._external_with_content
+            return x.is_dir()
+        except NoContentError:
+            return False
 
     @property
-    def content(self):
+    def _external_with_content(self):
         if self.layer_deleted.covered(self.path_segments):
             raise NoContentError
 
         writable = self.layer_writable.new(self.path_segments)
         if writable.exists():
-            return writable.content
+            return writable
 
-        return self.layer_readonly.new(self.path_segments).content
+        return self.layer_readonly.new(self.path_segments)
+
+    @property
+    def content(self):
+        return self._external_with_content.content
 
     @content.setter
     def content(self, value):

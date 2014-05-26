@@ -101,6 +101,13 @@ class Test_Overlay_content(unittest.TestCase):
 
 class Test_Overlay_delete(unittest.TestCase):
 
+    def test_makes_nonexistent(self):
+        f = OverlayFixture(readonly_text=SOME_TEXT, path=SOME_PATH)
+
+        f.overlay.delete()
+
+        self.assertFalse(f.overlay.exists())
+
     def test_makes_content_unavailable(self):
         f = OverlayFixture(readonly_text=SOME_TEXT, path=SOME_PATH)
 
@@ -125,3 +132,29 @@ class Test_Overlay_delete(unittest.TestCase):
 
         with self.assertRaises(Exception):
             (f.root_overlay / SOME_PATH).content
+
+
+class Test_Overlay_is_file(unittest.TestCase):
+
+    def test_readable_content(self):
+        f = OverlayFixture(readonly_text=SOME_TEXT, path=SOME_PATH)
+
+        self.assertTrue(f.overlay.is_file())
+
+    def test_writable_content(self):
+        f = OverlayFixture(writable_text=SOME_TEXT, path=SOME_PATH)
+
+        self.assertTrue(f.overlay.is_file())
+
+
+class Test_Overlay_is_dir(unittest.TestCase):
+
+    def test_readable_content(self):
+        f = OverlayFixture(readonly_text=SOME_TEXT, path=SOME_PATH)
+
+        self.assertTrue(f.overlay.parent().is_dir())
+
+    def test_writable_content(self):
+        f = OverlayFixture(writable_text=SOME_TEXT, path=SOME_PATH)
+
+        self.assertTrue(f.overlay.parent().is_dir())
