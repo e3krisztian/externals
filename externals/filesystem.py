@@ -26,20 +26,16 @@ class File(HierarchicalExternal):
     def is_dir(self):
         return os.path.isdir(self.path)
 
-    # .content
-    def content():
-        def fget(self):
-            with self.readable_stream() as f:
-                return f.read()
+    @property
+    def content(self):
+        'read/write property for accessing the content of "files"'
+        with self.readable_stream() as f:
+            return f.read()
 
-        def fset(self, value):
-            with self.writable_stream() as f:
-                f.write(value)
-
-        return locals()
-    content = property(
-        doc='read/write property for accessing the content of "files"',
-        **content())
+    @content.setter
+    def content(self, value):
+        with self.writable_stream() as f:
+            f.write(value)
 
     def readable_stream(self):
         try:
