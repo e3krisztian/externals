@@ -86,8 +86,17 @@ class Test_Overlay_content(unittest.TestCase):
 
         self.assertEquals(SOME_TEXT, (f.readonly / SOME_PATH).content)
 
-# TODO: test write content goes to writable
-# TODO: test write potentially makes non-existent existent
+    def test_set_content_can_be_read_back(self):
+        f = OverlayFixture(readonly_text=SOME_TEXT, path=SOME_PATH)
+        f.overlay.content = SOME_OTHER_TEXT
+        self.assertEquals(SOME_OTHER_TEXT, f.overlay.content)
+
+    def test_set_deleted_content_can_be_read_back(self):
+        f = OverlayFixture(readonly_text=SOME_TEXT, path=SOME_PATH)
+        f.overlay.delete()
+
+        f.overlay.content = SOME_OTHER_TEXT
+        self.assertEquals(SOME_OTHER_TEXT, f.overlay.content)
 
 
 class Test_Overlay_delete(unittest.TestCase):

@@ -40,22 +40,23 @@ class Overlay(HierarchicalExternal):
         # TODO
         return True
 
-    def content():
-        def fget(self):
-            if self.layer_deleted.covered(self.path_segments):
-                raise NoContentError
+    @property
+    def content(self):
+        if self.layer_deleted.covered(self.path_segments):
+            raise NoContentError
 
-            writable = self.layer_writable.new(self.path_segments)
-            if writable.exists():
-                return writable.content
+        writable = self.layer_writable.new(self.path_segments)
+        if writable.exists():
+            return writable.content
 
-            return self.layer_readonly.new(self.path_segments).content
+        return self.layer_readonly.new(self.path_segments).content
 
-        def fset(self, value):
-            # TODO
-            pass
-        return locals()
-    content = property(**content())
+    @content.setter
+    def content(self, value):
+        self.layer_deleted.drill(self.path_segments)
+
+        writable = self.layer_writable.new(self.path_segments)
+        writable.content = value
 
     def readable_stream(self):
         # TODO
