@@ -1,7 +1,5 @@
 from __future__ import unicode_literals
 
-import os
-
 from . import HierarchicalExternal, NoContentError
 
 
@@ -65,12 +63,12 @@ class Overlay(HierarchicalExternal):
         writable.content = value
 
     def readable_stream(self):
-        # TODO
-        return open(os.devnull, 'rb')
+        return self._external_with_content.readable_stream()
 
     def writable_stream(self):
-        # TODO
-        return open(os.devnull, 'wb')
+        self.layer_deleted.drill(self.path_segments)
+        writable = self.layer_writable.new(self.path_segments)
+        return writable.writable_stream()
 
     def delete(self):
         self.layer_deleted.cover(self.path_segments)
