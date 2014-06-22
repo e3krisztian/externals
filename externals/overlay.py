@@ -13,8 +13,17 @@ class Overlay(HierarchicalExternal):
 
     def __iter__(self):
         ''' Iterator over children '''
-        # TODO
-        return ()
+        def names(x):
+            return set(child.name for child in x / self.path)
+
+        read_only_names = names(self.layer_readonly)
+        writable_names = names(self.layer_writable)
+
+        child_names = read_only_names.union(writable_names)
+        for name in child_names:
+            child = self / name
+            if child.exists():
+                yield child
 
     def new(self, path_segments):
         return self.__class__(

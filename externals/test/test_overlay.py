@@ -175,3 +175,46 @@ class Test_Overlay_is_dir(unittest.TestCase):
         f = OverlayFixture(writable_text=SOME_TEXT, path=SOME_PATH)
 
         self.assertTrue(f.overlay.parent().is_dir())
+
+
+class Test_Overlay_children(unittest.TestCase):
+
+    def test_only_existing_children_returned(self):
+        # prepare
+        readonly = Memory()
+        writable = Memory()
+        mask = Mask()
+
+        (readonly / SOME_PATH / 'deleted-readonly').content = SOME_TEXT
+        (readonly / SOME_PATH / 'readonly').content = SOME_TEXT
+        (readonly / SOME_PATH / 'subpath-readonly' / 'x').content = SOME_TEXT
+
+        (readonly / SOME_PATH / 'common').content = SOME_TEXT
+        (writable / SOME_PATH / 'common').content = SOME_TEXT
+
+        (readonly / SOME_PATH / 'deleted-common').content = SOME_TEXT
+        (writable / SOME_PATH / 'deleted-common').content = SOME_TEXT
+
+        (writable / SOME_PATH / 'deleted-writable').content = SOME_TEXT
+        (writable / SOME_PATH / 'writable').content = SOME_TEXT
+        (writable / SOME_PATH / 'subpath-writable' / 'x').content = SOME_TEXT
+
+        root_overlay = m.Overlay(readonly, writable, mask)
+        overlay = root_overlay / SOME_PATH
+        (overlay / 'deleted-readonly').delete()
+        (overlay / 'deleted-common').delete()
+        (overlay / 'deleted-writable').delete()
+
+        # call
+        children = overlay.children()
+
+        # verify
+        child_names = [c.name for c in children]
+        self.assertEquals(
+            sorted([
+                'common',
+                'readonly', 'writable',
+                'subpath-readonly', 'subpath-writable'
+            ]),
+            sorted(child_names)
+        )
