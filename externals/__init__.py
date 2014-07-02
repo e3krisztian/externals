@@ -4,6 +4,8 @@ from .external import HierarchicalExternal
 HierarchicalExternal
 from .external import NoParentError
 NoParentError
+from .external import NoContentError
+NoContentError
 from .memory import Memory
 Memory
 from .filesystem import File

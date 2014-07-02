@@ -26,7 +26,16 @@ class Trie(object):
         return self._get_node(path).content
 
     def is_internal(self, path):
-        return bool(self._get_node(path).children)
+        try:
+            return bool(self._get_node(path).children)
+        except KeyError:
+            return False
+
+    def has_content(self, path):
+        try:
+            return self._get_node(path).content is not None
+        except KeyError:
+            return False
 
     def last(self, path):
         '''Content of last existing node on path'''

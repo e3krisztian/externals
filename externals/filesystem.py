@@ -1,7 +1,7 @@
 import os
 import shutil
 
-from . import HierarchicalExternal
+from . import HierarchicalExternal, NoContentError
 
 
 class File(HierarchicalExternal):
@@ -26,23 +26,22 @@ class File(HierarchicalExternal):
     def is_dir(self):
         return os.path.isdir(self.path)
 
-    # .content
-    def content():
-        def fget(self):
-            with self.readable_stream() as f:
-                return f.read()
+    @property
+    def content(self):
+        'read/write property for accessing the content of "files"'
+        with self.readable_stream() as f:
+            return f.read()
 
-        def fset(self, value):
-            with self.writable_stream() as f:
-                f.write(value)
-
-        return locals()
-    content = property(
-        doc='read/write property for accessing the content of "files"',
-        **content())
+    @content.setter
+    def content(self, value):
+        with self.writable_stream() as f:
+            f.write(value)
 
     def readable_stream(self):
-        return open(self.path, 'rb')
+        try:
+            return open(self.path, 'rb')
+        except IOError:
+            raise NoContentError(self.path)
 
     def writable_stream(self):
         parent, tail = os.path.split(self.path)
@@ -53,21 +52,6 @@ class File(HierarchicalExternal):
 
     def delete(self):
         shutil.rmtree(self.path)
-
-    MAX_BLOCK_SIZE = 1 * 1024 ** 2
-
-    def copy_to(self, other):
-        max_block_size = self.MAX_BLOCK_SIZE
-        with self.readable_stream() as source:
-            with other.writable_stream() as destination:
-                while True:
-                    try:
-                        block = source.read(max_block_size)
-                    except EOFError:
-                        break
-                    if not block:
-                        break
-                    destination.write(block)
 
 
 def working_directory():

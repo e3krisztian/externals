@@ -1,7 +1,7 @@
 import io
 import contextlib
 
-from . import HierarchicalExternal
+from . import HierarchicalExternal, NoContentError
 from .trie import Trie
 
 
@@ -23,36 +23,23 @@ class Memory(HierarchicalExternal):
         return ((self / name) for name in children)
 
     # External implementation
-    def exists(self):
-        try:
-            self._fs[self.path_segments]
-            return True
-        except KeyError:
-            return False
-
     def is_file(self):
-        try:
-            return self._fs[self.path_segments] is not None
-        except KeyError:
-            return False
+        return self._fs.has_content(self.path_segments)
 
     def is_dir(self):
+        return self._fs.is_internal(self.path_segments)
+
+    @property
+    def content(self):
+        'read/write property for accessing the content of "files"'
         try:
-            return self._fs.is_internal(self.path_segments)
-        except KeyError:
-            return False
-
-    # .content
-    def content():
-        def fget(self):
             return self._fs[self.path_segments]
+        except KeyError:
+            raise NoContentError(self.path)
 
-        def fset(self, value):
-            self._fs[self.path_segments] = value
-        return locals()
-    content = property(
-        doc='read/write property for accessing the content of "files"',
-        **content())
+    @content.setter
+    def content(self, value):
+        self._fs[self.path_segments] = value
 
     def readable_stream(self):
         stream = io.BytesIO()

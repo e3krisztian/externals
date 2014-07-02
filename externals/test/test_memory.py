@@ -4,12 +4,16 @@ import contextlib
 
 import externals.memory as m
 from externals.test import common
+from externals import NoContentError
 
 
 class TestMemoryRoot(unittest.TestCase, common.RootTests):
 
     def _get_root(self):
         return m.Memory()
+
+    def test_root_does_not_exists_initially(self):
+        self.assertFalse(m.Memory().exists())
 
 
 class Test_Memory(unittest.TestCase):
@@ -30,6 +34,15 @@ class Test_Memory(unittest.TestCase):
         x = m.Memory() / 'b'
         x.content = 'b content'
         self.assertEqual('b content', x.content)
+
+    def test_content_of_nonexistent_raises(self):
+        x = m.Memory() / 'nonexistent'
+
+        with self.assertRaises(NoContentError):
+            x.content
+
+        with self.assertRaises(NoContentError):
+            x.readable_stream()
 
     def test_nodes_on_the_path_to_existing_content_exist(self):
         a = m.Memory() / 'a'
@@ -106,7 +119,7 @@ class Test_Memory(unittest.TestCase):
 
         self.assertFalse(ab.exists())
         self.assertTrue('root', root.content)
-        with self.assertRaises(KeyError):
+        with self.assertRaises(NoContentError):
             ab.content
 
     def test_nonexistent_path_is_not_a_directory(self):
