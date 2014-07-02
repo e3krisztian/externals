@@ -81,5 +81,3 @@ class Overlay(HierarchicalExternal):
 
     def delete(self):
         self.layer_deleted.cover(self.path_segments)
-
-    # TODO: copy_to - should be big-content aware, like in filesystem

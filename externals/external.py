@@ -129,8 +129,17 @@ class External(object):
     def delete(self):  # pragma: no cover
         pass
 
-    def copy_to(self, other):
-        other.content = self.content
+    def copy_to(self, other, max_block_size=1024 ** 2):
+        with self.readable_stream() as source:
+            with other.writable_stream() as destination:
+                while True:
+                    try:
+                        block = source.read(max_block_size)
+                    except EOFError:
+                        break
+                    if not block:
+                        break
+                    destination.write(block)
 
 
 class HierarchicalExternal(Path, External):

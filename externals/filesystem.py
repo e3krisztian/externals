@@ -53,21 +53,6 @@ class File(HierarchicalExternal):
     def delete(self):
         shutil.rmtree(self.path)
 
-    MAX_BLOCK_SIZE = 1 * 1024 ** 2
-
-    def copy_to(self, other):
-        max_block_size = self.MAX_BLOCK_SIZE
-        with self.readable_stream() as source:
-            with other.writable_stream() as destination:
-                while True:
-                    try:
-                        block = source.read(max_block_size)
-                    except EOFError:
-                        break
-                    if not block:
-                        break
-                    destination.write(block)
-
 
 def working_directory():
     return File('.')
